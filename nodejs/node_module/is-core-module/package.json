@@ -1,0 +1,128 @@
+{
+  "_args": [
+    [
+      "is-core-module@^2.2.0",
+      "/home/ubuntu/nodejs/node_modules/resolve"
+    ]
+  ],
+  "_from": "is-core-module@>=2.2.0 <3.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "is-core-module@2.3.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/is-core-module",
+  "_nodeVersion": "15.14.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/is-core-module_2.3.0_1619296908500_0.14135566931527"
+  },
+  "_npmUser": {
+    "email": "ljharb@gmail.com",
+    "name": "ljharb"
+  },
+  "_npmVersion": "7.7.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "is-core-module",
+    "raw": "is-core-module@^2.2.0",
+    "rawSpec": "^2.2.0",
+    "scope": null,
+    "spec": ">=2.2.0 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/resolve"
+  ],
+  "_resolved": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.3.0.tgz",
+  "_shasum": "d341652e3408bca69c4671b79a0954a3d349f887",
+  "_shrinkwrap": null,
+  "_spec": "is-core-module@^2.2.0",
+  "_where": "/home/ubuntu/nodejs/node_modules/resolve",
+  "author": {
+    "email": "ljharb@gmail.com",
+    "name": "Jordan Harband"
+  },
+  "auto-changelog": {
+    "backfillLimit": false,
+    "commitLimit": false,
+    "hideCredit": true,
+    "output": "CHANGELOG.md",
+    "template": "keepachangelog",
+    "unreleased": false
+  },
+  "bugs": {
+    "url": "https://github.com/inspect-js/is-core-module/issues"
+  },
+  "dependencies": {
+    "has": "^1.0.3"
+  },
+  "description": "Is this specifier a node.js core module?",
+  "devDependencies": {
+    "@ljharb/eslint-config": "^17.5.1",
+    "aud": "^1.1.4",
+    "auto-changelog": "^2.2.1",
+    "eslint": "^7.25.0",
+    "nyc": "^10.3.2",
+    "safe-publish-latest": "^1.1.4",
+    "semver": "^6.3.0",
+    "tape": "^5.2.2"
+  },
+  "directories": {},
+  "dist": {
+    "fileCount": 10,
+    "integrity": "sha512-xSphU2KG9867tsYdLD4RWQ1VqdFl4HTO9Thf3I/3dLEfr0dbPTWKsuCKrgqMljg4nPE+Gq0VCnzT3gr0CyBmsw==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJghIKNCRA9TVsSAnZWagAAErgP/0+SVeevj9uN9pL9tH1N\nRT6pC4bAqlZqot3bQXPcB8kjKSayjHAL94qP5O6bwKQVV7WP6HlPi/HSbkVD\nZnSws4ZeeEc2EMPMUflsomMZr+TIHnDfQcryV96DAyOaGYTb6tkeMsr3EkLg\nylibgfj2QtNeSXpZ8ypk576JeT3s0OFBVZCdoe6OuuZIBc5XjWS1kQ/Qinv9\nUFgydcAsroxsq9pyf+0s8OoPEbL7Kgkh+lHr+ZyE7Qm+2kx/wV4K0aPBApy1\nnPEgel/yZMt9VnL0hY10KSP7DDKyBMuZMVsO40mU3RIjtvbzCxq64xn8JAkJ\n8L7FLSTHQAEvV76OSnz7XJUDEBHROQsRO/pnm22tewbp2q3YnHO9U5prfiL0\nMbeOMD45TVSkAs+2c+8IMPYs6dugBSpr1BmvYKqXSqGdzNcbjES+WvIAYz7K\nYKREQJf02LUHrMxiRSmgYG9rb5f0m2+vP9whv3lpjLzLiF6Y1JVHmkocZldg\nKPTkGqJtUg+bezJQZSf5Z5SEjTQklDu6av1M0ty7jQAZHBkgbRtWadco8zAF\nd7nMuMoQ+3piNbnJxSFimb40Op5QS8day5X+tK9UXdcmcfAVdmXguHUYEBCy\n8Fhe7Et2ENQ5W6riJg7T/TpmrK6+kufOFo+25O/tiE7kcUpJOppbfB9RU3ZY\nxNdD\r\n=wyOb\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "d341652e3408bca69c4671b79a0954a3d349f887",
+    "tarball": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.3.0.tgz",
+    "unpackedSize": 18816
+  },
+  "exports": {
+    ".": [
+      "./index.js",
+      {
+        "default": "./index.js"
+      }
+    ],
+    "./package.json": "./package.json"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/ljharb"
+  },
+  "gitHead": "e08737d65b8eaaea892f26d8b7c73f7663fb3a4f",
+  "homepage": "https://github.com/inspect-js/is-core-module",
+  "keywords": [
+    "core",
+    "dependencies",
+    "module",
+    "modules",
+    "node",
+    "npm"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "ljharb",
+      "email": "ljharb@gmail.com"
+    }
+  ],
+  "name": "is-core-module",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inspect-js/is-core-module.git"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "posttest": "aud --production",
+    "postversion": "auto-changelog && git add CHANGELOG.md && git commit --no-edit --amend && git tag -f \"v$(node -e \"console.log(require('./package.json').version)\")\"",
+    "prepublish": "not-ib-publish || npm run prepublishOnly",
+    "prepublishOnly": "safe-publish-latest",
+    "pretest": "npm run lint",
+    "test": "nyc npm run tests-only",
+    "tests-only": "tape 'test/**/*.js'",
+    "version": "auto-changelog && git add CHANGELOG.md"
+  },
+  "version": "2.3.0"
+}
