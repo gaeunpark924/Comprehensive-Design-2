@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      "pug-code-gen@^3.0.2",
+      "/home/ubuntu/nodejs/node_modules/pug"
+    ]
+  ],
+  "_from": "pug-code-gen@>=3.0.2 <4.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "pug-code-gen@3.0.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/pug-code-gen",
+  "_nodeVersion": "12.20.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/pug-code-gen_3.0.2_1614536612736_0.3693897120898739"
+  },
+  "_npmUser": {
+    "email": "pug-bot@rollingversions.com",
+    "name": "pug-bot"
+  },
+  "_npmVersion": "6.14.11",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "pug-code-gen",
+    "raw": "pug-code-gen@^3.0.2",
+    "rawSpec": "^3.0.2",
+    "scope": null,
+    "spec": ">=3.0.2 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/pug"
+  ],
+  "_resolved": "https://registry.npmjs.org/pug-code-gen/-/pug-code-gen-3.0.2.tgz",
+  "_shasum": "ad190f4943133bf186b60b80de483100e132e2ce",
+  "_shrinkwrap": null,
+  "_spec": "pug-code-gen@^3.0.2",
+  "_where": "/home/ubuntu/nodejs/node_modules/pug",
+  "author": {
+    "name": "Forbes Lindesay"
+  },
+  "dependencies": {
+    "constantinople": "^4.0.1",
+    "doctypes": "^1.1.0",
+    "js-stringify": "^1.0.2",
+    "pug-attrs": "^3.0.0",
+    "pug-error": "^2.0.0",
+    "pug-runtime": "^3.0.0",
+    "void-elements": "^3.1.0",
+    "with": "^7.0.0"
+  },
+  "description": "Default code-generator for pug.  It generates HTML via a JavaScript template function.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "fileCount": 5,
+    "integrity": "sha512-nJMhW16MbiGRiyR4miDTQMRWDgKplnHyeLvioEJYbk1RsPI3FuA3saEP8uwnTb2nTJEKBU90NFVWJBk4OU5qyg==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJgO9+lCRA9TVsSAnZWagAAMUsQAKUw0opPJ9mnxki0VVgH\nUCKAzsfFhRTFKi4WH9yGXMOqXk7IC+Cq/uC0efou+JAxxb+mVsdj4ZL2NahH\nFwLOBA54Owib1D+q1oBnhmA5okQ+5PMS86/SKuAHtLFqyBCghWOPYnoHaykt\nEMc4d6bqCWD/wb4qFOq5CuKGAK5zreVymr9SinNX1B5jdcgV6XQWgjv6R8AL\nR9jRJG1rRl1EDDezneyYhmfupZwRdmiolskA+VV4yGFlhFktwU2VZM/w+ubr\n5GRudqRi3njMFFjo/VVZO7CINn+Sb70XulxXSg+jGKWKWHvNrWWzfmO/C51u\nF9s2U3AHFWgANJ66keW8dzsGlYafxbZufPELFf1Eb5aiVSYCDSDjVcBxzzoW\nW83G7olXnCwPlpwA3wI1q/hciGLimS+l80+wvRPKu7IHx03/r8WjMGVCHxhB\nP99VblsJ1O689/KRQb3IQr++mxShsI8jS7N4QoBdByWcvUYnNgBvLzRiUDmw\nS7LSOFd5+4fwr4LtfOxOu37+3X5fahHQlKyPLCwVgO2kDDg4WlAEXdREUCnq\n7yUnyV4DBsR1DmxeZxrUDsVOkJMHl+LgJI2VZIEnSmdhF7/J2qJerUl833pm\nxT7VDg0Qw6FPCGLHsICr0Ucsl7/Cl3NjrDPMfdaz76IcjBkJJdin00YsMI+p\nQbPD\r\n=1hHs\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "ad190f4943133bf186b60b80de483100e132e2ce",
+    "tarball": "https://registry.npmjs.org/pug-code-gen/-/pug-code-gen-3.0.2.tgz",
+    "unpackedSize": 28505
+  },
+  "keywords": [
+    "pug"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "forbeslindesay",
+      "email": "forbes@lindesay.co.uk"
+    },
+    {
+      "name": "pug-bot",
+      "email": "pug-bot@rollingversions.com"
+    }
+  ],
+  "name": "pug-code-gen",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pugjs/pug/tree/master/packages/pug-code-gen"
+  },
+  "version": "3.0.2"
+}

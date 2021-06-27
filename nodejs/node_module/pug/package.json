@@ -1,0 +1,107 @@
+{
+  "_args": [
+    [
+      "pug",
+      "/home/ubuntu/nodejs"
+    ]
+  ],
+  "_from": "pug@latest",
+  "_hasShrinkwrap": false,
+  "_id": "pug@3.0.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/pug",
+  "_nodeVersion": "12.20.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/pug_3.0.2_1614540723473_0.3882242374246785"
+  },
+  "_npmUser": {
+    "email": "pug-bot@rollingversions.com",
+    "name": "pug-bot"
+  },
+  "_npmVersion": "6.14.11",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "pug",
+    "raw": "pug",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/pug/-/pug-3.0.2.tgz",
+  "_shasum": "f35c7107343454e43bc27ae0ff76c731b78ea535",
+  "_shrinkwrap": null,
+  "_spec": "pug",
+  "_where": "/home/ubuntu/nodejs",
+  "author": {
+    "email": "tj@vision-media.ca",
+    "name": "TJ Holowaychuk"
+  },
+  "browser": {
+    "fs": false
+  },
+  "dependencies": {
+    "pug-code-gen": "^3.0.2",
+    "pug-filters": "^4.0.0",
+    "pug-lexer": "^5.0.1",
+    "pug-linker": "^4.0.0",
+    "pug-load": "^3.0.0",
+    "pug-parser": "^6.0.0",
+    "pug-runtime": "^3.0.1",
+    "pug-strip-comments": "^2.0.0"
+  },
+  "description": "A clean, whitespace-sensitive template language for writing HTML",
+  "devDependencies": {
+    "jstransformer-cdata": "^1.0.0",
+    "jstransformer-coffee-script": "^1.0.0",
+    "jstransformer-less": "^2.1.0",
+    "jstransformer-markdown-it": "^2.0.0",
+    "jstransformer-stylus": "^1.0.0",
+    "jstransformer-uglify-js": "^1.1.1",
+    "jstransformer-verbatim": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^3.0.2",
+    "uglify-js": "github:mishoo/UglifyJS2#1c15d0db456ce32f1b9b507aad97e5ee5c8285f7"
+  },
+  "directories": {},
+  "dist": {
+    "fileCount": 6,
+    "integrity": "sha512-bp0I/hiK1D1vChHh6EfDxtndHji55XP/ZJKwsRqrz6lRia6ZC2OZbdAymlxdVFwd1L70ebrVJw4/eZ79skrIaw==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJgO++zCRA9TVsSAnZWagAAvHcP/3/8IuETPfs5gRZc8vn0\nAbTqbNru3QpC6bFKb1nZJqqr6gIjTEGsy1Rrn0Z1AxQkx2sZ99A+IXie8QFj\naK4JrdkAhP9qLDUYOzYcL4nsC1wl7E5zyX2CH7edr1xBdwEdk2PmIeeVz+UJ\nN8NU/6lc5OCcH1iIUfCOPcJ/JnOrurb5BAl9hRSDuA6ckQBpRIGWu+ALwSkS\n0zkqMQUyB7cP2hBUkdBPskYkvFLSpwJvD0Fj//fAqBzaAWsuLuNt7NKmaGZP\nj8/sxDT3AMp7lWV0CkV+nyPo20jcxCk2YhaJa5u5iki9R43sdbkUubPDyF+m\naHHowZEb5NkvSbOSH+64XGcUEzduX7gWyR9Qwc5aR3NDZYTqkD9j3OsoZJID\n96ITeRA/jfMVBRUJHY23WEcKrw/UpoE/I8Ncs+Q52ICzXFEJhzqp1lgWHZ6t\n29TIypiQfkT4OzVjUjvsHaBFCtXzQSoS6rjzFof1DP3NtlCIHZTSXDk65tYl\n83D/7aFgShANwdw2IxJXkxHsSo7NS1KDkeiLncotSMrEYBXvGMUuu16Z3Kot\nzn08WtcCo97hJXV4oMVWqB11bk82QPy0TZcZY9fWkYgr9sHw41n78muJLjpO\n9f/pTubuWjSBvO4b/NxM2HRps09pSWI6tl0FSCfx32wCLe+bDrwK5RvQSoHA\nIZe6\r\n=ynJE\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "f35c7107343454e43bc27ae0ff76c731b78ea535",
+    "tarball": "https://registry.npmjs.org/pug/-/pug-3.0.2.tgz",
+    "unpackedSize": 59747
+  },
+  "homepage": "https://pugjs.org",
+  "keywords": [
+    "html",
+    "jade",
+    "pug",
+    "template"
+  ],
+  "license": "MIT",
+  "main": "lib",
+  "maintainers": [
+    {
+      "name": "forbeslindesay",
+      "email": "forbes@lindesay.co.uk"
+    },
+    {
+      "name": "pug-bot",
+      "email": "pug-bot@rollingversions.com"
+    }
+  ],
+  "name": "pug",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pugjs/pug/tree/master/packages/pug"
+  },
+  "version": "3.0.2"
+}
