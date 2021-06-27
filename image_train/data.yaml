@@ -1,0 +1,5 @@
+names:
+- Bollard
+nc: 1
+train: /content/drive/MyDrive/dataset/train.txt
+val: /content/drive/MyDrive/dataset/val.txt
