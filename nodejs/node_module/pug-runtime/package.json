@@ -1,0 +1,90 @@
+{
+  "_args": [
+    [
+      "pug-runtime@^3.0.1",
+      "/home/ubuntu/nodejs/node_modules/pug"
+    ]
+  ],
+  "_from": "pug-runtime@>=3.0.1 <4.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "pug-runtime@3.0.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/pug-runtime",
+  "_nodeVersion": "12.20.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/pug-runtime_3.0.1_1614540714016_0.20219458972210047"
+  },
+  "_npmUser": {
+    "email": "pug-bot@rollingversions.com",
+    "name": "pug-bot"
+  },
+  "_npmVersion": "6.14.11",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "pug-runtime",
+    "raw": "pug-runtime@^3.0.1",
+    "rawSpec": "^3.0.1",
+    "scope": null,
+    "spec": ">=3.0.1 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/pug",
+    "/pug-attrs",
+    "/pug-code-gen"
+  ],
+  "_resolved": "https://registry.npmjs.org/pug-runtime/-/pug-runtime-3.0.1.tgz",
+  "_shasum": "f636976204723f35a8c5f6fad6acda2a191b83d7",
+  "_shrinkwrap": null,
+  "_spec": "pug-runtime@^3.0.1",
+  "_where": "/home/ubuntu/nodejs/node_modules/pug",
+  "author": {
+    "name": "ForbesLindesay"
+  },
+  "browser": {
+    "fs": false
+  },
+  "dependencies": {},
+  "description": "The runtime components for the pug templating language",
+  "devDependencies": {
+    "uglify-js": "^2.6.1"
+  },
+  "directories": {},
+  "dist": {
+    "fileCount": 10,
+    "integrity": "sha512-L50zbvrQ35TkpHwv0G6aLSuueDRwc/97XdY8kL3tOT0FmhgG7UypU3VztfV/LATAvmUfYi4wNxSajhSAeNN+Kg==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJgO++qCRA9TVsSAnZWagAA/yUP/2ANmVBKFhp7b18be3Do\nssrbHFED4yiV/61w9yKONhWgktlYRHnB5FpH2gJQAxID3FqOjpcZXJk1LT1+\n1U9sOxCPTvV8pdXIPXo/ybWEkyOZRznhe2zJs46w5hCqXyqwYYLbLJPpOYvj\nBYvuZz1hAnTAksXF7RKg5bXuhtkIXyQ5Z0FxUGv+3j2t3GSVEfpyBbe9bXbi\n4BDj+ZXhbrZ46fx7lHaeu70+AF0jWcg791ThwTgCgu/Z9zB7QbOFm8wD2yB+\nyYatIR0rEYdlSTEqKJ4MH6q+Y8einFXiaPXXd91CK+d3DB3oLqv5fWBwb441\nJfM3IoiVcamkgEb50YID/tKhiKQ/xGFr0TSRGsyrqjZazqAH5jdbbThc2gJX\n06GOuTfpbpV+oWK1aNPDHnOkxLhhoG0OsfWnWC3QEip+TzcVxxJxvFYuUkmp\n6xNocF7oCnbyheOuibNCpZneRqlILkZylQvSacaCIH1tVMyWZLWEdhBGaV4Q\nj4okmMHlE25nEypVh5589GEgM4AHVjpFGjP+YcKGRs78FG0Jna/wW2OmJD08\nfNe+rEiURhOiS9Vt6KEHXsxaERoj5xg5MHNajzevFswPecLtC7froOKE/QY/\nWmSIx4efAXJOgpQ9FwjW7ybhF865N71LN9us1QPKpiHeHlpBsiM3UbsdYhVP\nglkG\r\n=mCM8\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "f636976204723f35a8c5f6fad6acda2a191b83d7",
+    "tarball": "https://registry.npmjs.org/pug-runtime/-/pug-runtime-3.0.1.tgz",
+    "unpackedSize": 16952
+  },
+  "keywords": [
+    "pug"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "forbeslindesay",
+      "email": "forbes@lindesay.co.uk"
+    },
+    {
+      "name": "pug-bot",
+      "email": "pug-bot@rollingversions.com"
+    }
+  ],
+  "name": "pug-runtime",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pugjs/pug/tree/master/packages/pug-runtime"
+  },
+  "scripts": {
+    "build": "node prepublish",
+    "prepublish": "node prepublish",
+    "pretest": "npm run prepublish"
+  },
+  "version": "3.0.1"
+}
