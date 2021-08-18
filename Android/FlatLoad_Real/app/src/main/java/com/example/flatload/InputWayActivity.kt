@@ -363,9 +363,20 @@ class InputWayActivity : AppCompatActivity() { //출발지 도착지 입력 화�
         ) {
             return
         }
-        fusedLocationClient?.lastLocation?.addOnSuccessListener {//성공적으로 위치 가져왔으면?
-            loc = LatLng(it.latitude,it.longitude) //현재위치로 위치정보를 바꾸겠다
-            Log.i("currentLocation",loc.toString())
+        val temp = fusedLocationClient
+        if(temp != null){
+            temp.lastLocation
+                .addOnSuccessListener {//성공적으로 위치 가져왔으면?
+                    if (it == null) {
+                        Log.i("위치 가져오기 실패", "")    //현재 위치를 바로 가져올 수 없을 때 예외처리
+                    } else {
+                        loc = LatLng(it.latitude, it.longitude)  //현재위치로 위치정보를 바꾸겠다
+                        Log.i("currentLocation", loc.toString())
+                    }
+                }
+                .addOnFailureListener{
+                    Log.i("location error","")          //
+                }
         }
     }
 
