@@ -1,0 +1,29 @@
+서버에서 데이터베이스 사용을 위한 준비과정
+
+<데이터베이스 다운로드>
+1.sudo apt-get update
+2.sudo apt-get install libmysqlclient-dev
+3.sudo apt-get install mysql-server m )cysql-client
+
+<데이터베이스 접속>
+mysql -u root -p
+show databases;
+
+<데이터베이스 생성>
+create database FLATROAD;
+use FLATROAD;
+
+< 테이블 생성 >
+CREATE TABLE LOCATION(LOCALCODE int(10) primary key, LONGITUDE double not null, LATITUDE double not null);
+
+create table OBSTACLE(OBSTACLEID int(10) primary key, OBSTACLENAME VARCHAR(20) not null);
+
+ CREATE TABLE LOCATION_IMG(IMGID int(10),  LOCALCODE int(10) NOT NULL, IMGNAME varchar(50) NOT NULL , OBSTACLEID int(10) NOT NULL, PRIMARY KEY(IMGID), FOREIGN KEY(LOCALCODE) REFERENCES LOCATION(LOCALCODE) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(OBSTACLEID) REFERENCES OBSTACLE(OBSTACLEID));
+
+
+< nodejs에서 데이터베이스 모듈 다운로드 > 
+npm install --save mysql
+
+
+-> 권한오류 : ER_NOT_SUPPORTED_AUTH_MODE 발생시
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '(비밀번호입력)';
