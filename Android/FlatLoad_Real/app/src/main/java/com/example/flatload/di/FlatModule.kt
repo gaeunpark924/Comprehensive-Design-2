@@ -45,7 +45,7 @@ var retrofit = module{
     single<FlatAPI> {
         //로컬 서버와 같은 컴퓨터에서 애뮬레이터로 전송할 때 쓰는 주소 http://10.0.2.2:8080
         Retrofit.Builder()
-            .baseUrl("http://192.168.219.105:8080")
+            .baseUrl("http://10.0.2.2:8080")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))   //응답 받은 json을 바로 data class로 바꿀 수 잇음
