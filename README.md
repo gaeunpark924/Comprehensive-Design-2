@@ -2,6 +2,7 @@
 <p align="center">
  <img src="./img/main.jpg" width="280" height="500">
 </p>
+
 ## 🤗😀😊Members
 Konkuk University  smartICTconvergence</br>
 팀장 : 박가은</br>
@@ -20,14 +21,20 @@ Konkuk University  smartICTconvergence</br>
 ### 1. 길찾기 서비스</br>
 > 사용자는 출발지부터 목적지까지의 경로와 그 경로에서의 위험요소 정보를 받을 수 있다</br>
 사용자가 길찾기 서비스를 받기 위한 출발지와 도착지를 입력해야한다. 이때 내위치 버튼을 클릭하면 사용자의 현 위치를 주소로 변환해준다. 확인 버튼을 클릭하면 사용자가 입력한 출발지와 도착지에 따른 경로를 polyline으로 표시한 지도 화면이 나타난다. 이때 해당경로에서 인식된 볼라드의 위치를 마커로 표현해준다. 마커를 클릭하면 로드뷰 화면으로 이동하고, 해당 좌표의 로드뷰 사진과 위험요소 이름을 사용자에게 알려준다. 현재 위험요소는 볼라드만을 탐지하여 알려준다.
-
-![길찾기1](./img/road1.png) ![길찾기2](./img/road2.png) ![길찾기3](./img/road3.png)
+<p align="center">
+ <img src="./img/road1.png" width="180" height="310">
+ <img src="./img/road2.png" width="180" height="310">
+ <img src="./img/road3.png" width="180" height="310">
+</p>
 
 ### 2. 위험요소 추가 기능</br>
 > 사용자는 특정 장소의 이미지를 찍어 보행로 정보를 추가할 수 있다. 사용자는 위험요소가 존재하는 인도의 사진을 찍어 등록할 수 있다. 사용자가 등록한 정보와 이미지는 길찾기 서비스에 추가로 제공된다. </br>
  사용자가 위험요소를 직접 촬영하거나 스마트폰의 앨범에서 위험요소 사진을 선택하여 업로드 한다. 종류는 직접 입력하고 위치는 ‘현재 위치로 설정하기’나 ‘사진 데이터로 입력하기’ 버튼을 클릭하여 입력한다. 위험요소 데이터를 입력 받고 등록 버튼을 클릭한다. 
 
-![추가1](./img/plus1.jpg) ![추가2](./img/plus3.jpg)
+<p align="center">
+ <img src="./img/plus1.jpg" width="180" height="310">
+ <img src="./img/plus3.jpg" width="180" height="310">
+</p>
 
 ## 기대효과
 1. 사용자의 안전성과 효율성 증가
