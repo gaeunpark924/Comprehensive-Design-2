@@ -303,7 +303,7 @@ class CameraActivity : BaseActivity<ActivityMainBinding, CameraViewModel>(){
     private fun getBitmapImage(photoUri: Uri) : Bitmap?{   //nullable 타입 정의
         var photoBitmap: Bitmap? = null
         try{
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
                 photoBitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(),photoUri))
                 return photoBitmap
             }else{
