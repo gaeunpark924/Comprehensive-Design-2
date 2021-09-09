@@ -60,9 +60,31 @@ app.get('/roadview', function(req, res) {
 var pairList = [] 
 var final_img_list =[];
 
+//multer 모듈로 이미지 저장
+const multer = require('multer')
+var storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, './public/image')
+  },
+  filename: function (req, file, cb){
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({storage: storage})
+
+/* 앱에서 서버로 이미지 post */
+app.post('/android/post/upload', upload.single('img'),(req,res)=>{
+  res.json(req.file)
+  console.log(req.file)
+  //console.log(req.body)
+  const obj = JSON.parse(JSON.stringify(req.body)); // req.body = [Object: null prototype] { title: 'product' }
+  console.log(obj);
+
+})
+
 
 /* 앱에서 서버에 json post하길 원함 */ 
-app.post('/android/post', function(req, res, next){ /* 접근 url -> ex) http://192.168.25.16:3000/post */
+app.post('/android/post', function(req, res, next){ /* 접근 url -> ex) http://123.456.78.90:3000/post */
   console.log('client wants to post json in server');
   //console.log(req.body.locations)
   var inputData;
@@ -72,7 +94,7 @@ app.post('/android/post', function(req, res, next){ /* 접근 url -> ex) http://
   console.log("처음 리스트:",pairList);
 
   final_img_list = [];
-  savePairList(pairList);
+  savePairList(pairList, start, destination);
 
   setTimeout(function(){
    console.log("send to android==> ",result) //result =  ['경도_위도.jpg','경도_위도.jpg',...]
@@ -149,7 +171,7 @@ app.post('/android/post', function(req, res, next){ /* 접근 url -> ex) http://
  var file = require('fs');
  var path = require('path');
 
-function savePairList(list) {// 프로미스 객체 반환해야함
+function savePairList(list, start, destination) {// 프로미스 객체 반환해야함
   pairList = list;
   console.log("savePaitList 함수 안 리스트: ",pairList);
   
@@ -158,7 +180,7 @@ function savePairList(list) {// 프로미스 객체 반환해야함
     var client = new grabzit(config.applicationKey, config.applicationSecret);
     
     testloc = pairList;
-  
+
     var arr = [];
     count_testloc =testloc.length;
     console.log("count_testloc",count_testloc);
@@ -190,7 +212,9 @@ function savePairList(list) {// 프로미스 객체 반환해야함
         angle = 0;
       }
 
-      client.url_to_image("http://3.34.198.229:8080/roadview?log="+log+"&lat="+lat+"&bearing="+angle, options);
+      var options = {"width":-1,"height":-1,"format":"jpg","targetElement":"#roadview","waitForElement": "#roadview,"};
+      
+      client.url_to_image("http://11.222.33.44:8080/roadview?log="+log+"&lat="+lat+"&bearing="+angle, options);
   
       console.log("url_to_image",arr[cnt],arr[cnt+1],angle);
   
