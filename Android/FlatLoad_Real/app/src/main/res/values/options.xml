@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="route_type">
+        <item>기본</item>
+        <item>대로우선</item>
+        <item>최단거리</item>
+        <item>계단제외</item>
+    </string-array>
+</resources>

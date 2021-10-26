@@ -2,7 +2,6 @@ package com.example.flatload
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -10,16 +9,26 @@ import retrofit2.http.*
 import java.io.Serializable
 
 interface FlatAPI {
-    //Mapbox API로 도보 경로 받아오기
     @GET("/android/get")
     fun getJson(): Call<List<ResultGet>>
 
-    //앱 -> 서버로 경로 좌표 전송
     @FormUrlEncoded
     @POST("/android/post")
     fun postJson(
         @Field("locations") locations : List<Pair<Double, Double>>
     ): Call<List<ResultGet>>
+
+    @FormUrlEncoded
+    @POST("/android/post/point")
+    fun postPoint(
+        @Field("start") start: String,
+        @Field("destination") destination: String,
+        @Field("option") routeOption: String
+        //@Body point : String
+//        @Field("start") start : String,
+//        @Field("destination") destination : String
+        //@FieldMap data: HashMap<String, LatLng>
+    ): Call<String>//Call<List<ResultGet>>
 
     //앱 -> 서버로 위험요소 사진 전송
     @Multipart
@@ -27,8 +36,17 @@ interface FlatAPI {
     fun postImage(
         @Part photo: MultipartBody.Part,
         @PartMap data: HashMap<String, RequestBody>
-    ): Single<String>
+    ): Call<String>
 
     @GET("/android/result")
     fun getResult(): Call<String>
+
+    @GET("/v1/search/local.json")
+    fun getSearchRocal(
+        @Header("X-Naver-Client-Id") id :String,
+        @Header("X-Naver-Client-Secret") pw :String,
+        //@QueryMap query :HashMap<String, RequestBody>
+        @QueryMap query :HashMap<String, String>
+    ): Call<String>
+
 }

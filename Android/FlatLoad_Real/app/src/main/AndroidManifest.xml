@@ -7,10 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -20,14 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".MyApplication"
         android:usesCleartextTraffic="true">
         <activity android:name=".MarkerResultActivity"></activity>
         <activity android:name=".TestGetServerActivity" />
-        <activity android:name=".MapActivity" />
-        <activity android:name=".view.InputWayActivity" />
-        <activity android:name=".view.CameraActivity"/>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,9 +30,12 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.geo.API_KEY"-->
+        <!--            android:value="AIzaSyAp0EHOC1OJFzzi3S2_3luFM7APd_fukaw" />-->
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAp0EHOC1OJFzzi3S2_3luFM7APd_fukaw" />
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="l56nu9rxxp"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.flatload.provider"

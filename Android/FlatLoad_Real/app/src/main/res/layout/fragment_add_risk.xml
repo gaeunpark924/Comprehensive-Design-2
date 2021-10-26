@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:overScrollMode="never">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AddRiskFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/addriskLayout"
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+            <TextView
+                android:id="@+id/textView_addrisk_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_gravity="center"
+                android:text="\n 등록할 위험요소 정보를 입력해주세요"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:fontFamily="@font/nanum_extrabold" />
+            <ImageView
+                android:id="@+id/imageView_addrisk_camera"
+                android:layout_width="250dp"
+                android:layout_height="204dp"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                app:srcCompat="@drawable/camera_img"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_addrisk_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="5dp"
+                    android:text="위험요소 사진"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanum_bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_addrisk_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/btn_style2"
+                    android:text=" 직접 촬영하기 "
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center" />
+                <Button
+                    android:id="@+id/button_addrisk_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/btn_style2"
+                    android:textColor="@android:color/white"
+                    android:text=" 앨범에서 가져오기 "
+                    android:textAlignment="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_addrisk_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="0dp"
+                    android:text="위험요소 종류"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanum_bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/editText_addrisk_type"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="종류를 입력해 주세요."
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_addrisk_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="위험요소 위치"
+                    android:layout_marginStart="2dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanum_bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/editText_addrisk_location"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="위치를 입력해 주세요."
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_addrisk_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/btn_style2"
+                    android:textColor="@android:color/white"
+                    android:text=" 현재 위치로 설정하기 "
+                    android:textAlignment="center" />
+                <Button
+                    android:id="@+id/button_addrisk_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/btn_style2"
+                    android:textColor="@android:color/white"
+                    android:text="사진 데이터로 설정하기"
+                    android:textAlignment="center" />
+            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="7dp"-->
+<!--                android:orientation="horizontal">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/textView_addrisk_comment"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="2dp"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:fontFamily="@font/nanum_bold"-->
+<!--                    android:textSize="18sp" />-->
+<!--            </LinearLayout>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_addrisk_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="위험요소 설명"
+                    android:layout_marginStart="2dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/nanum_bold"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textview_addrisk_countText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="5dp"
+                    android:text="0/50"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/editText_addrisk_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="6dp"
+                    android:gravity="top"
+                    android:hint="위험요소에 대한 설명을 적어주세요."
+                    android:background="@drawable/edit_style"
+                    android:cursorVisible="true"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:ems="50"
+                    android:lines="5"
+                    android:maxLines="5"
+                    android:maxLength="50"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/button_addrisk_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/btn_style2"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="end"
+                    android:text="등록"
+                    android:gravity="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+</FrameLayout>
+</ScrollView>
