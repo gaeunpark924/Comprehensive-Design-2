@@ -59,25 +59,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-//        val rootView = inflater.inflate(
-//            R.layout.fragment_map,
-//            container, false
-//        ) as ViewGroup
-//        val mapView = rootView.findViewById(R.id.navermap) as MapView
-//        mapView.onCreate(savedInstanceState)
-//        mapView.getMapAsync(this)
-//        return rootView
-
-
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
-
 //    override fun onActivityCreated(savedInstanceState: Bundle?){
 //        super.onActivityCreated(savedInstanceState)
 //        val mapView = view?.findViewById(R.id.navermap) as MapView
@@ -105,9 +93,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.i("onMapReady","onMapReady안")
         naverMap = p0
 
+        //카메라 좌표
+        //현재 위치
         if (!(activity as MainActivity).loc.equals(LatLng(0.0,0.0))) {
-            Log.d("현재 위치", "현재 위치")
+            //Log.d("현재 위치", "현재 위치")
             cameraLatLng = LatLng((activity as MainActivity).loc.latitude, (activity as MainActivity).loc.longitude)
+        }
+        //출발지 위치
+        val polyline = PolylineOverlay()
+        if (latlngList.size != 0) {
+            cameraLatLng = LatLng(latlngList[0].latitude, latlngList[0].longitude)
+            polyline.setCoords(latlngList)
+            polyline.setMap(naverMap)
         }
 
         if (this::cameraLatLng.isInitialized)
@@ -150,12 +147,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.i("화면좌표(왼쪽 아래 모서리)",projection.fromScreenLocation(PointF(0f,height)).toString())
         // 나중에 메뉴 바의 높이 빼줘야함
 
-        }
-
-        val polyline = PolylineOverlay()
-        if (latlngList.size != 0) {
-            polyline.setCoords(latlngList)
-            polyline.setMap(naverMap)
         }
     }
 
