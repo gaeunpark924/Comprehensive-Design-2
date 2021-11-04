@@ -66,8 +66,8 @@ class AddRiskFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    val BASE_URL_FLAT_API = "http://3.35.209.27:8080"
 
-    private var sub_x:String? = null
     var permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -75,7 +75,7 @@ class AddRiskFragment : Fragment() {
         Manifest.permission.ACCESS_COARSE_LOCATION)
     var compressQuality = 100     //압축률
 
-    data class photo(val uri: Uri, val type: String, val location: String)                      //사용자 입력 데이터 클래스
+    data class photo(val uri: Uri, val type: String, val location: String, val feature: String) //사용자 입력 데이터 클래스
     data class mediaImage(val id: Long, val displayName: String, val relativePath: String)     //MediaStore 데이터 클래스
 
     private lateinit var photoFile: File
@@ -86,7 +86,7 @@ class AddRiskFragment : Fragment() {
     lateinit var newFile : File
     lateinit var absolutepath : String
     lateinit var locFinal : LatLng
-    lateinit var metaDataLatLng : Pair<Float,Float>
+    //lateinit var metaDataLatLng : Pair<Float,Float>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,15 +105,6 @@ class AddRiskFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddRiskFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             AddRiskFragment().apply {
@@ -125,20 +116,23 @@ class AddRiskFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mgeocorder: Geocoder = Geocoder(requireContext(), Locale.getDefault())
         initCamera()
         //카메라 버튼 클릭
         button_addrisk_camera.setOnClickListener { view ->
             captureCamera()
-            //Toast.makeText(requireContext(),"카메라 버튼", Toast.LENGTH_SHORT).show()
         }
         //앨범 버튼 클릭
         button_addrisk_gallery.setOnClickListener { view ->
             getImage()
-            //Toast.makeText(requireContext(),"앨범 버튼", Toast.LENGTH_SHORT).show()
         }
         //현재 위치 버튼 클릭
         button_addrisk_now.setOnClickListener { view ->
-            Toast.makeText(requireContext(),"현재 위치 버튼", Toast.LENGTH_SHORT).show()
+            val txtLoc = mgeocorder.getFromLocation((activity as MainActivity).loc.latitude,(activity as MainActivity).loc.longitude,1)[0]
+            locFinal = LatLng((activity as MainActivity).loc.latitude,(activity as MainActivity).loc.longitude)
+            if(txtLoc.getAddressLine(0)!=null){
+                editText_addrisk_location.setText(txtLoc.getAddressLine(0))
+            }
         }
         //사진 데이터 버튼 클릭
         button_addrisk_data.setOnClickListener { view ->
@@ -171,7 +165,6 @@ class AddRiskFragment : Fragment() {
             } else{
                 Toast.makeText(requireContext(),"사진에 위치정보가 없음",Toast.LENGTH_SHORT).show()
             }
-            //Toast.makeText(requireContext(),"사진 데이터 버튼", Toast.LENGTH_SHORT).show()
         }
         //등록 데이터 버튼 클릭
         button_addrisk_done.setOnClickListener { view ->
@@ -179,7 +172,8 @@ class AddRiskFragment : Fragment() {
                 val final_type = getType()
                 val final_location =
                     locFinal.latitude.toString() + " " + locFinal.longitude.toString()
-                finalData = photo(photoUri, final_type, final_location)
+                val final_feature = editText_addrisk_comment.getText().toString()
+                finalData = photo(photoUri, final_type, final_location,final_feature)
                 //서버로 보내기
                 println(finalData)
                 if (::absolutepath.isInitialized) {        //초기화 되었을 때 //앨범에서 가져온 경우
@@ -195,12 +189,11 @@ class AddRiskFragment : Fragment() {
             }catch (e: Exception){
                 Toast.makeText(requireContext(),"위험요소 등록을 위한 정보가 부족합니다", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(requireContext(),"등록 데이터 버튼", Toast.LENGTH_SHORT).show()
         }
         editText_addrisk_comment.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 var input = editText_addrisk_comment.text.toString()
-                textview_addrisk_countText.text = input.length.toString() + "/50"
+                textview_addrisk_countText.text = input.length.toString() + "/100"
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -209,9 +202,8 @@ class AddRiskFragment : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 var input = editText_addrisk_comment.text.toString()
-                textview_addrisk_countText.text = input.length.toString() + "/50"
+                textview_addrisk_countText.text = input.length.toString() + "/100"
             }
-
 
         })
     }
@@ -244,16 +236,18 @@ class AddRiskFragment : Fragment() {
     private fun testRetrofit(file: File){
         var requestBodyType : RequestBody = RequestBody.create(MediaType.parse("text/plain"),finalData.type)
         var requestBodyLocation : RequestBody = RequestBody.create(MediaType.parse("text/plain"),finalData.location)
+        var requestBodyFeature : RequestBody = RequestBody.create(MediaType.parse("text/plain"),finalData.feature)
         var map: HashMap<String, RequestBody> = HashMap<String, RequestBody>()
         map.put("location",requestBodyLocation)
         map.put("type",requestBodyType)
+        map.put("feature",requestBodyFeature)
 
         var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),file)
         var body : MultipartBody.Part = MultipartBody.Part.createFormData("img",file.getName(),requestBody)
         var gson = GsonBuilder().setLenient().create()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://13.125.145.5:8080") //"http://112.148.189.103:8080/"  192.168.219.107
+            .baseUrl(BASE_URL_FLAT_API) //"http://112.148.189.103:8080/"  192.168.219.107
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -266,7 +260,7 @@ class AddRiskFragment : Fragment() {
                     Toast.makeText(requireContext(), "위험요소가 등록되었습니다", Toast.LENGTH_SHORT).show()
                     Log.d("MYTEST","onResponse"+response?.body().toString())
                 }else{
-                    Toast.makeText(requireContext(), "성공 위험요소 등록에 실패했습니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "위험요소 등록에 실패했습니다", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
@@ -311,16 +305,14 @@ class AddRiskFragment : Fragment() {
         // 카메라 촬영을 하면 이미지뷰에 사진 삽입
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == AppCompatActivity.RESULT_OK) {
             photoUri = Uri.fromFile(photoFile)      //실제 URI(file://으로 시작)
-            //viewModel.changeImageView(photoUri)     //CameraViewModel
             setImageView(photoUri)
-            Log.d("MYTEST", photoUri.toString())
         }
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             if (data != null) {
                 val uri = data.getData()                //선택한 이미지를 지칭하는 Uri 객체
                 val resolver =
                     requireActivity().getContentResolver()     //Content provider로 해당 이미지에 대한 데이터를 SQLite 데이터베이스에서 읽어온다
-                Log.d("MYTEST", uri.toString())
+                //Log.d("MYTEST", uri.toString())
                 if (uri != null) {
                     val cursor = uri.let { resolver.query(it, null, null, null, null) }
                     cursor?.use {
@@ -334,53 +326,37 @@ class AddRiskFragment : Fragment() {
                             val displayName = cursor.getString(displayNameColumn)
                             val relativePath = cursor.getString(relativePathColumn)
                             mediaimage = mediaImage(id, displayName, relativePath)
-                            Log.d("MYTEST", mediaimage.toString())
+                            //Log.d("MYTEST", mediaimage.toString())
                             photoUri = ContentUris.withAppendedId(
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                 id
                             ) //mediastore URI
-                            Log.d("MYTEST", "*" + photoUri.toString())
+                            //Log.d("MYTEST", "*" + photoUri.toString())
                             //viewModel.changeImageView(photoUri)            //CameraViewModel
                             setImageView(photoUri)
                             getAbsolutePath()
                             getMetaData(absolutepath)
                         }
                     }
-                    System.out.println("출력");
                 }
             }
         }
     }
-    //사진 메타 데이터 불러오기(ViewModel)
+    //사진 메타 데이터 불러오기
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun getAbsolutePath(){
         absolutepath = "/storage/emulated/0/"+ mediaimage.relativePath + mediaimage.displayName
         //getMetaData(absolutepath)
-        System.out.println("absolutePath: "+ absolutepath)
-        //return absolutepath
-        //viewModel.getMetaData(absolutepath) ********************
+        Log.d("사진 절대 경로", absolutepath)
     }
     @RequiresApi(Build.VERSION_CODES.Q)
     fun getMetaData(absolutepath:String){
         var newAbsoluteFile = File(absolutepath)
-
         try {
             val exif = ExifInterface(newAbsoluteFile)         //ExifInterface로 사진 메타데이터 불러오기
             var x = showExif(exif)
             if (x != null){
-                //metaDataLatLng = x
                 locFinal = LatLng(x.first.toDouble(), x.second.toDouble())
-                //return x
-                //editText_addrisk_location.setText(x.toString())
-//                val mgeocorder = Geocoder(requireContext(), Locale.getDefault())
-//                //showexif 에서 계산한 실수는 float, latlng 은 double
-//
-//                println("위도"+x.first.toString()+"경도"+x.second.toString())
-//                val txtLoc = mgeocorder.getFromLocation(x.first.toDouble(),x.second.toDouble(),1)[0]
-//                if(txtLoc.getAddressLine(0)!=null){
-//                    editText_addrisk_location.setText(txtLoc.getAddressLine(0))
-//                }
-                //_metaDataLiveData.postValue(x)
             }
         }catch (e : IOException){
             e.printStackTrace()
@@ -410,7 +386,6 @@ class AddRiskFragment : Fragment() {
                     longitude.split(':')[1].replace(" ", ""),
                     longitudeRef.split(':')[1].replace(" ", "")
                 )
-                System.out.println("xxxxxxx")
                 return getLatLng(gpsArr)
             }
             else{
@@ -476,7 +451,7 @@ class AddRiskFragment : Fragment() {
             }
         }catch(e: Exception){
             e.printStackTrace()
-            System.out.println("비트맵 변환 오류")
+            Log.d("error","비트맵 변환 오류")
             return null
         }
     }
@@ -489,14 +464,14 @@ class AddRiskFragment : Fragment() {
             while(streamLength >= MAX_IMAGE_SIZE){
                 fileoutputstream = FileOutputStream(file)
                 bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, fileoutputstream)  //fileoutputstream : bitmap 이미지를 저장
-                Log.d("MYTEST",streamLength.toString())
+                Log.d("streamLength: ",streamLength.toString())
                 streamLength = file.length().toInt()
                 compressQuality -= 10                                                      //압축률
             }
             fileoutputstream.close()
         }catch (e: Exception){
             e.printStackTrace()
-            Log.d("MYTEST","리사이징 오류")
+            Log.d("error","리사이징 오류")
         }
     }
     //카메라 권한 요청
@@ -538,19 +513,14 @@ class AddRiskFragment : Fragment() {
             if (grantResults.all{it == PackageManager.PERMISSION_GRANTED}){
             }
             else{
-                //Fragment는 context에 접근할때 this를 사용할수 없음
-                //Fragment는 java.lang.Object로부터 상속받은 클래스라서 Context와 관련 없음(Activity는 android.content.Context로부터 상속받은 클래스)
-                //대신 requireActivity()나 getActivity()를 사용한다.
-                //getActivity는 자신이 속한 Activity의 참조를 획득하여 사용하는 것
-                //requireActivity는 activity가 null인 상황이 없음을 보장하는 것. 없으면 예외 발생시킴
-                Toast.makeText(requireContext(),"카메라 권한 제공을 하셔야 합니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"카메라 권한 제공에 동의하셔야 합니다", Toast.LENGTH_SHORT).show()
             }
         }
         if(requestCode==100){
             if (grantResults.all{it == PackageManager.PERMISSION_GRANTED}){
             }
             else{
-                Toast.makeText(requireContext(),"위치 권한 제공을 하셔야 합니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"위치 권한 제공에 동의하셔야 합니다", Toast.LENGTH_SHORT).show()
             }
         }
     }

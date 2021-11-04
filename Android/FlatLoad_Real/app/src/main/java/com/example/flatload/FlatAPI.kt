@@ -4,10 +4,17 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
+//import org.json.JSONObject
+
 import retrofit2.Call
 import retrofit2.http.*
 import java.io.Serializable
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray
+//import org.json.JSONObject
+import com.google.gson.JsonObject
 interface FlatAPI {
     @GET("/android/get")
     fun getJson(): Call<List<ResultGet>>
@@ -28,7 +35,7 @@ interface FlatAPI {
 //        @Field("start") start : String,
 //        @Field("destination") destination : String
         //@FieldMap data: HashMap<String, LatLng>
-    ): Call<String>//Call<List<ResultGet>>
+    ): Call<Array<Array<JsonObject>>>//Call<List<ResultGet>>
 
     //앱 -> 서버로 위험요소 사진 전송
     @Multipart

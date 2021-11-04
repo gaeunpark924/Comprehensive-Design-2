@@ -13,6 +13,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
@@ -41,7 +43,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
     var latlngList = mutableListOf<LatLng>()
     //private lateinit var viewModel : sharedViewModel
-
     //private val viewModel: sharedViewModel by activityViewModels()
 //    private val viewModel: SharedViewModel by lazy {
 //        ViewModelProvider(requireActivity(), object : ViewModelProvider.Factory {
@@ -75,18 +76,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         mapView = view.findViewById(R.id.navermap) as MapView
         //mapView.onCreate(savedInstanceState)
-
-        sharedViewModel.routeLiveData.observe(viewLifecycleOwner, Observer<String> {
-            //데이터 받음
-            String -> //Toast.makeText(requireContext(), String, Toast.LENGTH_SHORT).show()
-            //Log.d("MapFragment 안",it)
-            var routeJson = JSONArray(String)
-            parseRouteJson(routeJson)
+//        sharedViewModel.routeLiveData.observe(this, Observer {
+//            parseRouteJson(it)
+//        })
+//        sharedViewModel.roadInfoLiveData.observe(viewLifecycleOwner, Observer {
+//            //로드뷰 정보
+//            Log.d("로드뷰 정보",it.toString())
+//        })
+//        sharedViewModel.dbInfoLiveData.observe(viewLifecycleOwner, Observer {
+//            //데이터베이스 정보
+//            Log.d("데이터베이스 정보",it.toString())
+//        })
+        sharedViewModel.infoLiveData.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(requireContext(),"sharedViewModel", Toast.LENGTH_LONG).show()
+            parsingInfo(it)
         })
-
         mapView.getMapAsync(this)
         Log.i("mapView","getMapAsync시작")
-
     }
 
     override fun onMapReady(p0: NaverMap) {
@@ -149,28 +155,67 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }
     }
+    private fun parsingInfo(result:Array<Array<JsonObject>>){
+        var serverRouteInfo = result?.get(0)
+        var serverRoadviewInfo = result?.get(1)
+        var serverDatabaseInfo = result?.get(2)
+//        Log.d("serverRouteInfo",serverRouteInfo.get(0).toString())
+//        Log.d("serverRoadviewInfo",serverRoadviewInfo.get(0).toString())
+        if (serverRouteInfo != null) {
+            parseRouteJson(serverRouteInfo)
+        }
+        var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
+        if (serverRoadviewInfo != null) {
+            for(i in 0 until serverRoadviewInfo.size){
+                val jsonObject = serverRoadviewInfo[i]
+                //val location = jsonObject.get("location").asString
+                val location = jsonObject.get("location").toString()
+                Log.d("location 확인",location)
+                // [ longtitude 경도 127.xx, latitude 위도 37.xx ] 파싱
+                val tmp = location.split("[")[1]
+                val longtitude = tmp.split(",")[0].toDouble()
+                val latitude = tmp.split(",")[1].split("]")[0].toDouble()
+                val latlng = LatLng(latitude,longtitude)
+                val image = jsonObject.get("image").asString
+                val roadviewInfo = RoadviewInfo(latlng,image)
+                list_RoadviewInfo.add(roadviewInfo)
+            }
+        }
+        Log.d("list_RoadviewInfo 확인",list_RoadviewInfo.toString())
 
-    private fun parseRouteJson(route: JSONArray){
-        Log.d("parseRouteJson안",route.getJSONObject(0).getJSONObject("properties").getString("totalDistance"))
-        Log.d("parseRouteJson안",route.getJSONObject(0).getJSONObject("properties").getString("totalTime"))
-        val distance = route.getJSONObject(0).getJSONObject("properties").getString("totalDistance").toFloat()/1000.0f
-        val time = route.getJSONObject(0).getJSONObject("properties").getString("totalTime").toFloat()/60.0f
+        var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
+        if (serverDatabaseInfo != null) {
+            for(i in 0 until serverDatabaseInfo.size){
+                val info = serverDatabaseInfo[i].get("info").toString()
+                //Log.d("info",info)
+                // info = 'INFO_ID/OBSTACLEID/LONGITUDE/LATITUDE/FEATURE/IMGNAME'
+                val splitArray = info.split("/")
+                val info_id = splitArray[0]
+                val obstacle_id = splitArray[1]
+                val latlng = LatLng(splitArray[3].toDouble(), splitArray[2].toDouble())
+                val feature = splitArray[4]
+                val imgname = splitArray[5]
+                val databaseInfo = DatabaseInfo(info_id,obstacle_id,latlng,feature,imgname) //최종 객체
+                list_DatabaseInfo.add(databaseInfo)
+            }
+        }
+        Log.d("list_DatabaseInfo 확인",list_DatabaseInfo.toString())
 
-            //MapFragment
-        for (i in 0 until route.length()){
-            val json = route.getJSONObject(i)
-            val jsonGeo = json.getJSONObject("geometry")
-            if (jsonGeo.getString("type") == "LineString"){
-                val arrCoords = jsonGeo.getJSONArray("coordinates") //jsonGeo["coordinates"] //jsonGeo.get("coordinates") //jsonGeo.getJSONArray("coordinates")
-                //Log.d("좌표 확인2",arrCoords.toString())
-                for (j in 0 until arrCoords.length()){
-                    val arrLatLng = arrCoords[j].toString().substring(1,arrCoords[j].toString().length-1).split(",")
-                    Log.d("test",arrLatLng.get(0)+" "+arrLatLng.get(1))
-                    latlngList.add(LatLng(arrLatLng.get(1).toDouble(), arrLatLng.get(0).toDouble()))
-                        //Log.d("test",latlngList.toString())
-                        //Log.d("좌표 확인",arrayCoords[j].toString().split(",").get(1))
+    }
+    //경로json 파싱
+    private fun parseRouteJson(route: Array<JsonObject>){
+        Log.d("parseRouteJson","파싱 시작")
+        for (i in 0..route.size-1){
+            val rObject = route.get(i)
+            val geo = rObject.getAsJsonObject("geometry")
+            //Log.d("geometry",geo.toString())
+            //Log.d("type",geo.get("type").toString())
+            if (geo.get("type").toString().contains("LineString")){
+                val arrCoords = geo.getAsJsonArray("coordinates")
+                for (j in 0..arrCoords.size()-1){
+                    //Log.d("arrCoords", arrCoords[j].toString())
+                    latlngList.add(LatLng(arrCoords[j].asJsonArray[1].asDouble,arrCoords[j].asJsonArray[0].asDouble))
                 }
-                    //Log.d("coordinate 확인",jsonGeo.getJSONArray("coordinates").toString())
             }
         }
         val start = latlngList[0]
@@ -180,6 +225,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("destination",destination.toString())
         Log.d("latlngList 확인",latlngList.toString())
     }
+
     override fun onStart() {
         super.onStart()
         mapView?.onStart()

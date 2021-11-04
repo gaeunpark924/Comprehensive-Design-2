@@ -26,10 +26,12 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.naver.maps.geometry.Tm128
 
 import kotlinx.android.synthetic.main.fragment_input_way.*
+import okhttp3.OkHttpClient
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -40,6 +42,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.*
+import java.util.concurrent.TimeUnit
+import com.google.gson.JsonObject
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,10 +62,10 @@ class InputWayFragment : Fragment() {
     private var param2: String? = null
 
     private val sharedViewModel:SharedViewModel by activityViewModels()
-//    val okHttpClient = OkHttpClient.Builder()
-//        .readTimeout(15, TimeUnit.MINUTES)
-//        .build();
-//    val BASE_URL_FLAT_API ="http://10.0.2.2:3000" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
+    val okHttpClient = OkHttpClient.Builder()
+        .readTimeout(15, TimeUnit.MINUTES)
+        .build();
+   val BASE_URL_FLAT_API ="http://3.35.209.27:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
    val gson = GsonBuilder().setLenient().create()
 //    val retrofit = Retrofit.Builder()
 //        .baseUrl(BASE_URL_FLAT_API).client(okHttpClient)
@@ -75,7 +79,7 @@ class InputWayFragment : Fragment() {
     lateinit var routeOption: String
 
     var itemList = mutableListOf<ItemList>()
-    //var latlngList = mutableListOf<LatLng>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -111,22 +115,29 @@ class InputWayFragment : Fragment() {
             if(txtLoc.getAddressLine(0)!=null){
                 editText_inputway_start.setText(txtLoc.getAddressLine(0))
             }
-            Log.i("my location", txtLoc.toString())
+            //Log.i("my location", txtLoc.toString())
         }
         //확인 버튼
         button_inputway_yes.setOnClickListener { view ->
-            if(TextUtils.isEmpty(editText_inputway_start.text.toString()) &&TextUtils.isEmpty(editText_inputway_end.text.toString())) {
-                Toast.makeText(requireContext(),"위치를 입력해주세요", Toast.LENGTH_LONG).show()
-                editText_inputway_start.text.clear()
-                editText_inputway_end.text.clear()
+            if(TextUtils.isEmpty(editText_inputway_start.text.toString()) || TextUtils.isEmpty(editText_inputway_end.text.toString()))
+            {
+                if(TextUtils.isEmpty(editText_inputway_start.text.toString()) && TextUtils.isEmpty(editText_inputway_end.text.toString())){
+                    Toast.makeText(requireContext(),"출발지와 도착지를 입력해주세요", Toast.LENGTH_LONG).show()
+                }else{
+                    if(TextUtils.isEmpty(editText_inputway_start.text.toString()))
+                        Toast.makeText(requireContext(),"출발지를 입력해주세요", Toast.LENGTH_LONG).show()
+                    else if(TextUtils.isEmpty(editText_inputway_end.text.toString()))
+                        Toast.makeText(requireContext(),"도착지를 입력해주세요", Toast.LENGTH_LONG).show()
+                }
             }else{
                 Log.d("출발지 확인",editText_inputway_start.text.toString())
                 Log.d("도착지 확인",editText_inputway_end.text.toString())
                 if (::origin.isInitialized && ::destination.isInitialized) {
-                    listView.clearChoices()
+                    //listView.clearChoices()
+                    listView.setVisibility(View.INVISIBLE)
                     sendToServerLatLng(origin, destination, routeOption)
                 }else{
-                    Toast.makeText(requireContext(),"", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),"보행로 길찾기를 위한 좌표 정보가 부족합니다 돋보기 버튼을 클릭해 장소를 검색해주세요", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -134,11 +145,11 @@ class InputWayFragment : Fragment() {
         button_inputway_no.setOnClickListener { view ->
             editText_inputway_start.text.clear()
             editText_inputway_end.text.clear()
+            listView.setVisibility(View.INVISIBLE)
         }
         //출발지 장소검색 버튼
         imageButton1.setOnClickListener{view ->
-            var x = editText_inputway_start.getText()
-            if (TextUtils.isEmpty(x.toString())) { ///////////////////
+            if (TextUtils.isEmpty(editText_inputway_start.getText().toString())) { ///////////////////
                 Toast.makeText(requireContext(),"출발지가 비어 있습니다",Toast.LENGTH_SHORT).show()
             } else{
                 getRocal(editText_inputway_start.getText().toString())
@@ -147,8 +158,7 @@ class InputWayFragment : Fragment() {
         }
         //도착지 장소검색 버튼
         imageButton2.setOnClickListener{view->
-            var x = editText_inputway_start.getText()
-            if (TextUtils.isEmpty(x.toString())) {
+            if (TextUtils.isEmpty(editText_inputway_end.getText().toString())) {
                 Toast.makeText(requireContext(),"도착지가 비어 있습니다.",Toast.LENGTH_SHORT).show()
             }else{
                 getRocal(editText_inputway_end.getText().toString())
@@ -197,15 +207,6 @@ class InputWayFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InputWayFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             InputWayFragment().apply {
@@ -224,44 +225,93 @@ class InputWayFragment : Fragment() {
         var destString = destLatLng.latitude.toString()+","+destLatLng.longitude.toString()
 
         val api2 = Retrofit.Builder()
-            .baseUrl("http://192.168.219.107:8080/") //"http://192.168.219.107:8080/" http://10.0.2.2:8080 http://192.168.219.107:8080/
+            .baseUrl(BASE_URL_FLAT_API).client(okHttpClient) //"http://192.168.219.107:8080/" http://10.0.2.2:8080 http://192.168.219.107:8080/
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
         val client = api2.create(FlatAPI::class.java)
-        client.postPoint(startString,destString,routeOption).enqueue(object : Callback<String> {
-        override fun onResponse(call: Call<String>, response: Response<String>) {
+        client.postPoint(startString,destString,routeOption).enqueue(object : Callback <Array<Array<JsonObject>>> {
+        override fun onResponse(call: Call <Array<Array<JsonObject>>> , response: Response <Array<Array<JsonObject>>> ) {
             if (response?.isSuccessful){
                 Toast.makeText(requireContext(), "좌표 전송에 성공했습니다", Toast.LENGTH_SHORT).show()
-                Log.d("성공","onResponse"+response?.body().toString())
-                var result = response?.body().toString()
-                var route = JSONArray(result)
-                val distance = route.getJSONObject(0).getJSONObject("properties").getString("totalDistance").toFloat()/1000.0f
-                if (checkDistance(distance) == 1){
-                    sharedViewModel.changeRoute(result)
-                    (activity as MainActivity?)?.setFragment(MapFragment(),"1")
+                //var jsonArrayRoute = JSONArray(response?.body()?.get(0)?.get(0).getJSONArray())
+                if ( response != null ){
+                    Log.d("출력response",response.toString())
+                    var result = response.body()
+
+                    var serverRouteInfo = result?.get(0)
+                    var serverRoadviewInfo = result?.get(1)
+                    var serverDatabaseInfo = result?.get(2)
+                    val distance = serverRouteInfo?.get(0)?.getAsJsonObject("properties")?.get("totalDistance").toString().toFloat()/1000.0f
+                    if (result != null){
+                        if (serverRouteInfo != null) {
+                            if (checkDistance(distance) == 1) {
+                                sharedViewModel.changeInfo(result)
+                            }
+                        }
+                    }
+//                    //Log.d("totalDistance", distance)
+//                    var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
+//                    if (serverRoadviewInfo != null) {
+//                        for(i in 0 until serverRoadviewInfo.size){
+//                            val jsonObject = serverRoadviewInfo[i]
+//                            //Log.d("jsonObject",jsonObject.get("location").toString())
+//                            //val location = jsonObject.get("location").asString
+//                            val location = jsonObject.get("location").toString()
+//                            Log.d("location 확인",location)
+//                            // [ longtitude 경도 127.xx, latitude 위도 37.xx ] 파싱
+//                            val tmp = location.split("[")[1]
+//                            val longtitude = tmp.split(",")[0].toDouble()
+//                            val latitude = tmp.split(",")[1].split("]")[0].toDouble()
+//                            val latlng = LatLng(latitude,longtitude)
+//                            val image = jsonObject.get("image").asString
+//                            val roadviewInfo = RoadviewInfo(latlng,image)
+//                            list_RoadviewInfo.add(roadviewInfo)
+//                        }
+//                        //sharedViewModel.changeRoadInfo(list_RoadviewInfo)
+//                    }
+//                    Log.d("list_RoadviewInfo 확인",list_RoadviewInfo.toString())
+//
+//                    var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
+//                    if (serverDatabaseInfo != null) {
+//                        for(i in 0 until serverDatabaseInfo.size){
+//                            val info = serverDatabaseInfo[i].get("info").asString
+//                            // info = 'INFO_ID/OBSTACLEID/LONGITUDE/LATITUDE/FEATURE/IMGNAME'
+//                            val splitArray = info.split("/")
+//                            val info_id = splitArray[0]
+//                            val obstacle_id = splitArray[1]
+//                            val latlng = LatLng(splitArray[3].toDouble(), splitArray[2].toDouble())
+//                            val feature = splitArray[4]
+//                            val imgname = splitArray[5]
+//                            val databaseInfo = DatabaseInfo(info_id,obstacle_id,latlng,feature,imgname) //최종 객체
+//                            list_DatabaseInfo.add(databaseInfo)
+//                        }
+//                        //sharedViewModel.changeDbInfo(list_DatabaseInfo)
+//                    }
+//                    Log.d("list_DatabaseInfo 확인",list_DatabaseInfo.toString())
+
+
+                    //MapFragment로 이동
+                    (activity as MainActivity?)?.setFragment(MapFragment(), "1")
                 }
             }else{
+                Log.d("실패 onResponse 안","")
                 //Toast.makeText(requireContext(), "onResponse ", Toast.LENGTH_SHORT).show()
             }
         }
-        override fun onFailure(call: Call<String>, t: Throwable) {
-            Log.d("실패", t.message)
+        override fun onFailure(call: Call<Array<Array<JsonObject>>>, t: Throwable) {
+            Log.d("실패 onFailure 안", t.message)
             Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
             //finish()
         }
     })
     }
 
-//    var fusedLocationClient: FusedLocationProviderClient?= null
-//    var loc= LatLng(0.0,0.0)
-//    var locationCallback: LocationCallback?=null
-//    var locationRequest: LocationRequest?=null
-
     private fun getRocal(search:String){
         rocalSearchRetrofit(search)
     }
+    //Naver local search
     private fun rocalSearchRetrofit(search:String){
         var map: HashMap<String, String> = HashMap<String, String>()
         map.put("query",search)
@@ -294,9 +344,11 @@ class InputWayFragment : Fragment() {
                             jsonObject2.getString("mapy"))
                         )
                     }
-                    Log.d("MYTEST","onResponse"+"success")
-                    //Log.d("MYTEST","onResponse"+response?.body().toString())
-                    //Log.d("MYTEST",itemList.toString())
+                    if(itemList.size<1)
+                        Toast.makeText(requireContext(), "찾은 장소가 없습니다 다시 입력해주세요", Toast.LENGTH_SHORT).show()
+                    //장소 검색 리스트뷰 보이게
+                    listView.setVisibility(View.VISIBLE)
+                    //리스트뷰 어뎁터 연결
                     listView.adapter = ListViewAdapter(itemList)
                 }else{
                     Toast.makeText(requireContext(), "주소 검색에 실패했습니다", Toast.LENGTH_SHORT).show()
@@ -313,7 +365,6 @@ class InputWayFragment : Fragment() {
     private fun checkDistance(distanceKm: Float):Int{
         if(distanceKm >= 3.00){
             Toast.makeText(requireContext(),"해당 서비스는 3km 이내의 도보 길찾기 경로만 제공 합니다.", Toast.LENGTH_LONG).show()
-            //textviewJSONText.setText(" ")
             editText_inputway_start.text.clear()
             editText_inputway_end.text.clear()
             return 0

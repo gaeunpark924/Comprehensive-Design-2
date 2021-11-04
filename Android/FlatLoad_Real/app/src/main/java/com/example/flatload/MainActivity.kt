@@ -181,9 +181,9 @@ class MainActivity : AppCompatActivity() {
     }
     fun setFragment(fragment: Fragment, tag:String){
         if (fragment.isAdded()){
-            manager.beginTransaction().hide(active).show(fragment).commit()
+            manager.beginTransaction().hide(active).show(fragment).commitAllowingStateLoss()  //commit()
         }else{
-            manager.beginTransaction().hide(active).add(R.id.fl_container, fragment).commit()
+            manager.beginTransaction().hide(active).add(R.id.fl_container, fragment).commitAllowingStateLoss()  //commit()
         }
         bnv_main.menu.getItem(tag.toInt()-1).setChecked(true)
         active = fragment

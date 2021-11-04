@@ -57,7 +57,8 @@
                 android:id="@+id/imageButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_search" />
+                android:src="@android:drawable/ic_menu_search"
+                android:backgroundTint="#FAFAFA"/>
 
         </LinearLayout>
 
@@ -87,7 +88,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageButton2"
-                android:src="@android:drawable/ic_menu_search"/>
+                android:src="@android:drawable/ic_menu_search"
+                android:backgroundTint="#FAFAFA"/>
 
         </LinearLayout>
         <LinearLayout

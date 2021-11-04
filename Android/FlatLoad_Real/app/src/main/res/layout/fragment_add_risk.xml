@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginStart="5dp"
-                    android:text="0/50"/>
+                    android:text="0/100"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -217,7 +217,7 @@
                     android:ems="50"
                     android:lines="5"
                     android:maxLines="5"
-                    android:maxLength="50"/>
+                    android:maxLength="100"/>
 
             </LinearLayout>
             <LinearLayout
