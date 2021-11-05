@@ -65,7 +65,7 @@ class InputWayFragment : Fragment() {
     val okHttpClient = OkHttpClient.Builder()
         .readTimeout(15, TimeUnit.MINUTES)
         .build();
-   val BASE_URL_FLAT_API ="http://3.35.209.27:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
+   val BASE_URL_FLAT_API ="http://3.37.89.187:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
    val gson = GsonBuilder().setLenient().create()
 //    val retrofit = Retrofit.Builder()
 //        .baseUrl(BASE_URL_FLAT_API).client(okHttpClient)
@@ -104,7 +104,7 @@ class InputWayFragment : Fragment() {
         val items = resources.getStringArray(R.array.route_type)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
         val inputMethodManager = getContext()?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-
+        //reverseGeocoding(37.54739196416974,127.07436560931173)
         //initLocation()
         //내 위치 버튼
         button_inputway_now.setOnClickListener { view ->
@@ -235,63 +235,22 @@ class InputWayFragment : Fragment() {
         override fun onResponse(call: Call <Array<Array<JsonObject>>> , response: Response <Array<Array<JsonObject>>> ) {
             if (response?.isSuccessful){
                 Toast.makeText(requireContext(), "좌표 전송에 성공했습니다", Toast.LENGTH_SHORT).show()
-                //var jsonArrayRoute = JSONArray(response?.body()?.get(0)?.get(0).getJSONArray())
                 if ( response != null ){
-                    Log.d("출력response",response.toString())
                     var result = response.body()
 
                     var serverRouteInfo = result?.get(0)
-                    var serverRoadviewInfo = result?.get(1)
-                    var serverDatabaseInfo = result?.get(2)
-                    val distance = serverRouteInfo?.get(0)?.getAsJsonObject("properties")?.get("totalDistance").toString().toFloat()/1000.0f
+                    Log.d("출력",serverRouteInfo.toString())
+                    Log.d("출력", serverRouteInfo?.size.toString())
+
                     if (result != null){
-                        if (serverRouteInfo != null) {
-                            if (checkDistance(distance) == 1) {
-                                sharedViewModel.changeInfo(result)
-                            }
+                        //경로가 비어있는 경우
+                        if (serverRouteInfo?.size != 0){ // && serverRouteInfo.isEmpty()) {
+                            sharedViewModel.changeInfo(result)
+                            //}
+                        }else{
+                            Toast.makeText(requireContext(),"해당 서비스는 3km 이내의 도보 길찾기 경로만 제공 합니다.", Toast.LENGTH_LONG).show()
                         }
                     }
-//                    //Log.d("totalDistance", distance)
-//                    var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
-//                    if (serverRoadviewInfo != null) {
-//                        for(i in 0 until serverRoadviewInfo.size){
-//                            val jsonObject = serverRoadviewInfo[i]
-//                            //Log.d("jsonObject",jsonObject.get("location").toString())
-//                            //val location = jsonObject.get("location").asString
-//                            val location = jsonObject.get("location").toString()
-//                            Log.d("location 확인",location)
-//                            // [ longtitude 경도 127.xx, latitude 위도 37.xx ] 파싱
-//                            val tmp = location.split("[")[1]
-//                            val longtitude = tmp.split(",")[0].toDouble()
-//                            val latitude = tmp.split(",")[1].split("]")[0].toDouble()
-//                            val latlng = LatLng(latitude,longtitude)
-//                            val image = jsonObject.get("image").asString
-//                            val roadviewInfo = RoadviewInfo(latlng,image)
-//                            list_RoadviewInfo.add(roadviewInfo)
-//                        }
-//                        //sharedViewModel.changeRoadInfo(list_RoadviewInfo)
-//                    }
-//                    Log.d("list_RoadviewInfo 확인",list_RoadviewInfo.toString())
-//
-//                    var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
-//                    if (serverDatabaseInfo != null) {
-//                        for(i in 0 until serverDatabaseInfo.size){
-//                            val info = serverDatabaseInfo[i].get("info").asString
-//                            // info = 'INFO_ID/OBSTACLEID/LONGITUDE/LATITUDE/FEATURE/IMGNAME'
-//                            val splitArray = info.split("/")
-//                            val info_id = splitArray[0]
-//                            val obstacle_id = splitArray[1]
-//                            val latlng = LatLng(splitArray[3].toDouble(), splitArray[2].toDouble())
-//                            val feature = splitArray[4]
-//                            val imgname = splitArray[5]
-//                            val databaseInfo = DatabaseInfo(info_id,obstacle_id,latlng,feature,imgname) //최종 객체
-//                            list_DatabaseInfo.add(databaseInfo)
-//                        }
-//                        //sharedViewModel.changeDbInfo(list_DatabaseInfo)
-//                    }
-//                    Log.d("list_DatabaseInfo 확인",list_DatabaseInfo.toString())
-
-
                     //MapFragment로 이동
                     (activity as MainActivity?)?.setFragment(MapFragment(), "1")
                 }
@@ -307,7 +266,42 @@ class InputWayFragment : Fragment() {
         }
     })
     }
-
+//    private fun reverseGeocoding(lat:Double, log: Double){
+//        var map: HashMap<String, String> = HashMap<String, String>()
+//        val coord = log.toString()+','+lat.toString()
+//        Log.d("coord",coord)
+//        map.put("request","coordsToaddr")
+//        map.put("coord",coord)
+//        //map.put("sourcecrs","epsg:4326")
+//        map.put("output","json")
+//
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/")//.client(okHttpClient)
+//            //.addConverterFactory(ScalarsConverterFactory.create())
+//            .addConverterFactory(GsonConverterFactory.create(gson))
+//            .build()
+//
+//        Log.d("reverse geocoding","**********************************")
+//
+//        val client = retrofit.create(FlatAPI::class.java)
+//        client.getReverseGeocoding(getString(R.string.client_id_naver_reverse),
+//            getString(R.string.access_token_naver_reverse),
+//            coord).enqueue(object : Callback<JsonObject> {
+//            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+//                if (response?.isSuccessful){
+//                    Log.d("reverse geocoding", response.body()?.toString())
+//                }else{
+//                    Log.d("성공", response.message())
+//                    //Toast.makeText(baseContext, response.message(), Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+//                Log.d("실패", t.message)
+//                //Toast.makeText(baseContext, "주소 검색에 실패했습니다.", Toast.LENGTH_SHORT).show()
+//                //finish()
+//            }
+//        })
+//    }
     private fun getRocal(search:String){
         rocalSearchRetrofit(search)
     }

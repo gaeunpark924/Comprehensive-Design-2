@@ -2,7 +2,8 @@ package com.example.flatload
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.mapbox.mapboxsdk.geometry.LatLng
+//import com.mapbox.mapboxsdk.geometry.LatLng
+import com.naver.maps.geometry.LatLng
 import java.io.Serializable
 
 data class LatlngIntent(val latlng:LatLng): Serializable {

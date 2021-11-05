@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".DatabaseResultActivity"></activity>
         <activity android:name=".MarkerResultActivity"></activity>
         <activity android:name=".TestGetServerActivity" />
         <activity android:name=".MainActivity">

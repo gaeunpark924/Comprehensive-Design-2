@@ -5,7 +5,8 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.mapbox.mapboxsdk.geometry.LatLng
+import com.naver.maps.geometry.LatLng
+import kotlinx.android.synthetic.main.activity_database_result.*
 import kotlinx.android.synthetic.main.activity_marker_result.*
 import java.util.*
 
@@ -21,18 +22,31 @@ class MarkerResultActivity : AppCompatActivity() {
 //        val latlng = markerLoc.latlng
 
         val bundle = i.getParcelableExtra<Bundle>("bundle")
-        val latlng = bundle.getParcelable<LatLng>("markerLocation")
+        val latlng = bundle.getParcelable<LatLng>("location")
+        Log.d("latlng",latlng.toString())
 
+        //val txtLoc = mgeocorder.getFromLocation(latlng!!.latitude,latlng!!.longitude,1)[0]
+
+//        if(txtLoc.getAddressLine(0)!=null){
+//            textView6.setText(txtLoc.getAddressLine(0))
+//        }else{
+//            textView6.setText("주소 x")
+//        }
+//        Log.i("danger location", txtLoc.toString())
         val mgeocorder: Geocoder = Geocoder(this, Locale.getDefault())
-        val txtLoc = mgeocorder.getFromLocation(latlng!!.latitude,latlng!!.longitude,1)[0]
 
-        if(txtLoc.getAddressLine(0)!=null){
-            textView6.setText(txtLoc.getAddressLine(0))
-        }else{
-            textView6.setText("주소 x")
+        if (latlng != null) {
+            val txtLoc = mgeocorder.getFromLocation(
+                latlng.latitude,
+                latlng.longitude,
+                1
+            )[0]
+            if (txtLoc.getAddressLine(0) != null) {
+                textView6.setText(txtLoc.getAddressLine(0))
+            }else{
+                textView6.setText(latlng.toString())
+            }
         }
-        Log.i("danger location", txtLoc.toString())
-
         //textView6.text = latlng.toString()
         val decodedBytes = i.getByteArrayExtra("image")
         val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)

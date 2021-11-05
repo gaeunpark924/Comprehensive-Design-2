@@ -55,5 +55,4 @@ interface FlatAPI {
         //@QueryMap query :HashMap<String, RequestBody>
         @QueryMap query :HashMap<String, String>
     ): Call<String>
-
 }

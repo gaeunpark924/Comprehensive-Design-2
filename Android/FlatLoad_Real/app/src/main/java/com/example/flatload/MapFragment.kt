@@ -1,13 +1,17 @@
 package com.example.flatload
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PointF
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -19,9 +23,20 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PolylineOverlay
+import com.naver.maps.map.util.MarkerIcons
+import kotlinx.android.synthetic.main.fragment_input_way.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.json.JSONArray
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.HashMap
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +57,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //private val mapView: MapView? = null
     private lateinit var mapView: MapView
     var latlngList = mutableListOf<LatLng>()
+    var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
+    var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
     //private lateinit var viewModel : sharedViewModel
     //private val viewModel: sharedViewModel by activityViewModels()
 //    private val viewModel: SharedViewModel by lazy {
@@ -110,17 +127,120 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (latlngList.size != 0) {
             cameraLatLng = LatLng(latlngList[0].latitude, latlngList[0].longitude)
             polyline.setCoords(latlngList)
+            polyline.setColor(Color.parseColor("#FF0000"))
+            polyline.setWidth(7)
+            //Log.d("연결선",polyline.width.toString())
             polyline.setMap(naverMap)
         }
 
         if (this::cameraLatLng.isInitialized)
-            naverMap.cameraPosition = CameraPosition(cameraLatLng,14.0)
+            naverMap.cameraPosition = CameraPosition(cameraLatLng,14.5)
         naverMap.setMapType(NaverMap.MapType.Basic)
+        ////////////////////////////////////////
+        // RoadviewInfo 마커 띄우기 및 클릭이벤트 //
+        if(list_RoadviewInfo.isNotEmpty()){
+            for(i in 0 until list_RoadviewInfo.size){
+                val marker = Marker()
+                marker.width = 105
+                marker.height = 105
+                marker.icon = OverlayImage.fromResource(R.drawable.danger)
+
+                Log.d("마커",marker.width.toString())
+                Log.d("마커",marker.height.toString())
+                //marker.icon = OverlayImage.fromResource(R.drawable.danger)
+                marker.position = list_RoadviewInfo[i].location
+                marker.map = naverMap
+                marker.setOnClickListener {
+                    // RoadviewInfo 객체를 액티비티로 전달
+                    val intent = Intent(activity,MarkerResultActivity::class.java)
+                    val args = Bundle()
+                    args.putParcelable("location",list_RoadviewInfo[i].location)
+                    intent.putExtra("bundle", args)
+
+                    val decodedBytes = Base64.decode(list_RoadviewInfo[i].image,0)
+                    //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    intent.putExtra("image",decodedBytes)
+                    startActivity(intent)
+                    true
+                }
+            }
+        }
+
+        /////////////////////////////////////////
+        // DatabaseInfo 마커 띄우기 및 클릭이벤트 //
+        if(list_DatabaseInfo.isNotEmpty()){
+            for(i in 0 until list_DatabaseInfo.size){
+                val marker2 = Marker()
+                marker2.width = 76
+                marker2.height = 110
+                marker2.position = list_DatabaseInfo[i].latlng
+                marker2.map = naverMap
+                var obstacle =""
+                if(list_DatabaseInfo[i].OBSTACLE_ID=="1"){
+                    obstacle = "결빙구간"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="2"){
+                    obstacle = "공사중"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="3"){
+                    obstacle = "보도장애시설"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="4"){
+                    obstacle = "급경사"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="5"){
+                    obstacle = "횡단보도"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="6"){
+                    obstacle = "보도 턱"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="7"){
+                    obstacle = "횡단보도 턱"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="8"){
+                    obstacle = "진입제어봉"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="9"){
+                    obstacle = "음향신호기"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="10"){
+                    obstacle = "육교"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="11"){
+                    obstacle = "교량"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="12"){
+                    obstacle = "고가도로"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="13"){
+                    obstacle = "계단"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="14"){
+                    obstacle = "승강기"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="15"){
+                    obstacle = "에스컬레이터"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="16"){
+                    obstacle = "휠체어리프트"
+                }else if(list_DatabaseInfo[i].OBSTACLE_ID=="17"){
+                    obstacle = "경사로"
+                }
+                marker2.setOnClickListener {
+                    // DatabaseInfo 객체를 액티비티로 전달
+                    val intent = Intent(activity,DatabaseResultActivity::class.java)
+                    val args = Bundle()
+                    args.putParcelable("location",list_DatabaseInfo[i].latlng)
+                    intent.putExtra("bundle", args)
+
+                    intent.putExtra("obstacle",obstacle)
+
+                    if(list_DatabaseInfo[i].IMGNAME.isNotEmpty()){
+                        val decodedBytes = Base64.decode(list_DatabaseInfo[i].IMGNAME,0)
+                        //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        intent.putExtra("image",decodedBytes)
+                    }
+
+                    if(list_DatabaseInfo[i].FEATURE.isNotEmpty()){
+                        intent.putExtra("feature",list_DatabaseInfo[i].FEATURE)
+                    }
+                    startActivity(intent)
+                    true
+                }
+
+            }
+        }
+
         // 마커 추가
-        val marker2 = Marker()
-        marker2.position = LatLng(37.560046407129505, 126.9753292489345)
-        //marker2.position = LatLng(37.57037156583255, 126.98314335390604)
-        marker2.map = naverMap
+//        val marker2 = Marker()
+//        marker2.position = LatLng(37.560046407129505, 126.9753292489345)
+//        //marker2.position = LatLng(37.57037156583255, 126.98314335390604)
+//        marker2.map = naverMap
 
         //val obstacle = findViewById<Button>(R.id.obstacle)
         obstacle.setOnClickListener {
@@ -128,7 +248,42 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val marker = Marker()
             marker.position = LatLng(37.5670135, 126.9783740)
             marker.map = naverMap
-
+//            // RoadviewInfo 마커 띄우기 및 클릭이벤트 //
+//            if(list_RoadviewInfo.isNotEmpty()){
+//                for(i in 0 until list_RoadviewInfo.size){
+//                    val marker = Marker()
+//                    marker.position = list_RoadviewInfo[i].location
+//                    marker.map = naverMap
+//                    marker.setOnClickListener {
+//                        // RoadviewInfo 객체를 액티비티로 전달
+//                        val intent = Intent(activity,MarkerResultActivity::class.java)
+//                        val args = Bundle()
+//                        args.putParcelable("location",list_RoadviewInfo[i].location)
+//                        intent.putExtra("bundle", args)
+//
+//                        val decodedBytes = Base64.decode(list_RoadviewInfo[i].image,0)
+//                        //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+//                        intent.putExtra("image",decodedBytes)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                }
+//            }
+//
+//            /////////////////////////////////////////
+//            // DatabaseInfo 마커 띄우기 및 클릭이벤트 //
+//            if(list_DatabaseInfo.isNotEmpty()){
+//                for(i in 0 until list_DatabaseInfo.size){
+//                    val marker2 = Marker()
+//                    marker2.position = list_DatabaseInfo[i].latlng
+//                    marker2.map = naverMap
+//                    marker2.setOnClickListener {
+//                        // DatabaseInfo 객체를 액티비티로 전달
+//
+//                        true
+//                    }
+//                }
+//            }
             // 현재 지도 화면의 좌표 출력
             val cameraPosition = naverMap.cameraPosition
             //Toast.makeText(this,cameraPosition.toString(), Toast.LENGTH_SHORT).show()
@@ -164,7 +319,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (serverRouteInfo != null) {
             parseRouteJson(serverRouteInfo)
         }
-        var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
+        //var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
         if (serverRoadviewInfo != null) {
             for(i in 0 until serverRoadviewInfo.size){
                 val jsonObject = serverRoadviewInfo[i]
@@ -183,7 +338,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         Log.d("list_RoadviewInfo 확인",list_RoadviewInfo.toString())
 
-        var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
+        val location = list_RoadviewInfo.get(0).location
+        val imgstr = list_RoadviewInfo.get(0).image
+        Log.d("location",location.toString())
+        Log.d("imgStr",imgstr.toString())
+        //changeActivity(location,imgstr)
+//        val intent = Intent(requireContext(),MarkerResultActivity::class.java)
+//        val location = list_RoadviewInfo.get(0).location
+//        val latlngintent = LatlngIntent(location)   //LatLngIntent 맵박스 LatLng -> 네이버 LatLng으로 변경
+//        val imgstr = list_RoadviewInfo.get(0).image
+//        intent.putExtra("markerLocation", latlngintent)
+//        intent.putExtra("imageString",imgstr)
+//        val args = Bundle()
+//        args.putParcelable("markerLocation",location)
+//        intent.putExtra("bundle", args)
+//
+//        val decodedBytes = Base64.decode(imgstr,0)
+//        //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+//        intent.putExtra("image",decodedBytes)
+//        startActivity(intent)
+////        val i = Intent(this,MarkerResultActivity::class.java)
+////        val intent = Intent(this@Intent1,Intent2::class.java)
+//        intent.putExtra("num1",1) //데이터 넣기
+//        intent.putExtra("num2",2) //데이터 넣기
+//        startActivityForResult(intent,101)
+
+        //var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
         if (serverDatabaseInfo != null) {
             for(i in 0 until serverDatabaseInfo.size){
                 val info = serverDatabaseInfo[i].get("info").toString()
@@ -202,6 +382,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("list_DatabaseInfo 확인",list_DatabaseInfo.toString())
 
     }
+
+
     //경로json 파싱
     private fun parseRouteJson(route: Array<JsonObject>){
         Log.d("parseRouteJson","파싱 시작")
