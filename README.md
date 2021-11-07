@@ -22,8 +22,8 @@ Konkuk University  smartICTconvergence</br>
 > 사용자는 출발지부터 목적지까지의 경로와 그 경로에서의 위험요소 정보를 받을 수 있다</br>
 사용자가 길찾기 서비스를 받기 위한 출발지와 도착지를 입력해야한다. 이때 내위치 버튼을 클릭하면 사용자의 현 위치를 주소로 변환해준다. 확인 버튼을 클릭하면 사용자가 입력한 출발지와 도착지에 따른 경로를 polyline으로 표시한 지도 화면이 나타난다. 이때 해당경로에서 인식된 볼라드의 위치를 마커로 표현해준다. 마커를 클릭하면 로드뷰 화면으로 이동하고, 해당 좌표의 로드뷰 사진과 위험요소 이름을 사용자에게 알려준다. 현재 위험요소는 볼라드만을 탐지하여 알려준다.
 <p align="center">
- <img src="./img/road1.png" width="180" height="310">
- <img src="./img/road2.png" width="180" height="310">
+ <img src="./img/road2_1.png" width="180" height="310">
+ <img src="./img/road2_2.png" width="180" height="310">
  <img src="./img/road3.png" width="180" height="310">
 </p>
 
@@ -32,8 +32,8 @@ Konkuk University  smartICTconvergence</br>
  사용자가 위험요소를 직접 촬영하거나 스마트폰의 앨범에서 위험요소 사진을 선택하여 업로드 한다. 종류는 직접 입력하고 위치는 ‘현재 위치로 설정하기’나 ‘사진 데이터로 입력하기’ 버튼을 클릭하여 입력한다. 위험요소 데이터를 입력 받고 등록 버튼을 클릭한다. 
 
 <p align="center">
- <img src="./img/plus1.jpg" width="180" height="310">
- <img src="./img/plus3.jpg" width="180" height="310">
+ <img src="./img/plus2_1.jpg" width="180" height="310">
+ <img src="./img/plus2_2.jpg" width="180" height="310">
 </p>
 
 ## ✨기대효과✨
