@@ -11,7 +11,6 @@ function base64_encode(file) {
   return new Buffer(bitmap).toString('base64');  
 }  
 
-
 //데이터베이스 설정
 var mysql=require('mysql');
 
@@ -21,6 +20,7 @@ var connection= mysql.createConnection({
    password:'0000',
    database :'FLATROAD'
 });
+
 //sql문 실행 함수
 function execute_SQL(query){
   console.log(query);
@@ -32,6 +32,7 @@ function execute_SQL(query){
    });
 }
 
+//방위각 계산
 function getAngle(lat1, log1, lat2, log2) {
   //출발지
    var x1 = lat1 * Math.PI / 180;
@@ -62,7 +63,6 @@ app.set('view engine','ejs');//ejs 템플릿 엔진 사용
 
 app.engine('html',require('ejs').renderFile);   
 
-
 //8080 포트를 가지고 대기
 const server = app.listen(8080,()=>{
 //app.listen(8080,()=>{
@@ -81,7 +81,6 @@ app.get('/roadview', function(req, res) {
 
 var pairList = []; 
 var final_img_list =[];
-
 
 //multer 모듈로 이미지 저장
 const multer = require('multer')
@@ -144,11 +143,10 @@ app.post('/android/post/upload', upload.single('img'),(req,res)=>{
   });
 });
 
-var TIME_OUT_ID = 1
 const request = require('request');
 var routeArr = [];
 
-/*tmap*/
+/* tmap */
 /* 앱에서 서버에 json post하길 원함 */ 
 app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) http://123.456.78.90:3000/post */
     var st = req.body.start.split(",");
@@ -213,13 +211,11 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
         }
         
             for ( var i in resultData) {
-                //console.log(i)
                 var geometry = resultData[i].geometry;
                 var properties = resultData[i].properties;      
                 if (geometry.type == "LineString") {
                     for ( var j in geometry.coordinates) {                                   
-                        //배열에 담기    
-                        //구간의 첫번째 좌표(Point)  
+                        //구간의 첫번째 좌표("Point") 배열에 담기  
                         if (j == 0){          
                             routeArr.push(String(geometry.coordinates[j][1])+","+String(geometry.coordinates[j][0]));
                         }
@@ -232,27 +228,22 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
             routeJson.route = routeArr;
             routeJson.description = descriptionArr;
            
-            
+            //3km 이상일 경우 바로 응답 보내게
             if (tDistance >= 3){
               console.log("총 거리 3km 이상")
               res.send([[],[],[]])
             }else{
               savePairList(routeArr, req.body.start, req.body.destination);
-	      //body.features 를 jsonArray로
-              //saveFinalRoute(JSON.stringify(body.features)) // app.post안 변수 final_list로 저장되는지 확인
-              saveFinalRoute(body.features)
+              saveFinalRoute(body.features)  //app.post안 변수 final_list로 저장되는지 확인
               console.log("saveFinalRoute이후 final_route값",final_route)
               setTimeout(()=>timeoutFunction(),90000);
             }
-
     });
 
   // console.log("saveFinalRoute이후 final_route값",final_route)  
   //final_img_list = []; //앱으로 보낼 이미지 리스트
   database_img=[]; //데이터베이스에 저장된 위험요소 정보중 사용할 이미지의 리스트
   database_data=[]; //최종적으로 앱으로 보낼 사용자가 추가한 위험요소 정보들의 리스트 
-
-  //savePairList(pairList, start, destination);
 	
   function timeoutFunction(){
     console.log("send to android==> ",result) //result =  ['경도_위도.jpg','경도_위도.jpg',...]
@@ -293,11 +284,11 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
       //1.경로 JSON.stringify(body.features)
       var finalJsonArray = [];
       finalJsonArray.push(final_route) 
-      console.log("1.경로 JSON.stringify(body.features)")
+      //console.log("1.경로 JSON.stringify(body.features)")
 
       //2.로드뷰로 찾은 위험요소 위치, 이미지
       finalJsonArray.push(result_JsonArray)
-      console.log("2.로드뷰로 찾은 위험요소 위치, 이미지")
+      //console.log("2.로드뷰로 찾은 위험요소 위치, 이미지")
 
       //3.추가위험정보 이름,위치,설명
       var database_JsonArray = [];
@@ -307,7 +298,7 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
         database_JsonArray.push(bJson);
       }
       finalJsonArray.push(database_JsonArray)
-      console.log("3.추가위험정보 이름,위치,설명")
+      //console.log("3.추가위험정보 이름,위치,설명")
       //jsonFinalOjbect.database = database_JsonArray
 
       //finalJsonArray를 string으로 변환해 전송
@@ -439,16 +430,6 @@ function savePairList(list, start, destination) {// 프로미스 객체 반환�
     };
 };
 
-module.exports = {
-  savePairList
-};
-
-//라우터 설정
-//var routeRouter = require('./routes/route');
-//const router = require('./routes/route');
-//Tmap api
-//app.use('/android/post/point', routeRouter.router);
-
  /*grabzit 비동기 통신*/
 app.get('/handler', function (req, res) {// res 하면 어디로 보내지는지 확인
   console.log('handler');
@@ -511,7 +492,7 @@ function saveModelResult(string){
   console.log("save함수안",result);
   console.log(result.length);
 }
-
+/* yolo */
 function yolo(){
   final_img_list = []; //앱으로 보낼 이미지 리스트
    
