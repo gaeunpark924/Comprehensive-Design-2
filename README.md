@@ -16,7 +16,7 @@ Konkuk University  smartICTconvergence</br>
 - 앱 : Android / Kotlin
 - 서버 : NodeJS / JavaScript
 - 객체 탐지 모델 : YOLOv5 / python
-- 데이터베이스 :
+- 데이터베이스 : MySQL
 
 ## 주요 기능🔧
 ### 1. 지도 서비스</br>
