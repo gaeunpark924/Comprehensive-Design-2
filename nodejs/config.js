@@ -6,7 +6,7 @@ config.applicationKey = "";
 config.applicationSecret = "";
 //The absolute URL that of your handler on your website
 config.callbackHandlerUrl = "";
-//Your ip
+//Your Ip
 config.ip = "";
 
 module.exports = config;
