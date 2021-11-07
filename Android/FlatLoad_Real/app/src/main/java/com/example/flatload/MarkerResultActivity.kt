@@ -20,19 +20,12 @@ class MarkerResultActivity : AppCompatActivity() {
         val i = intent
 //        val markerLoc = i.getSerializableExtra("markerLocation") as LatlngIntent
 //        val latlng = markerLoc.latlng
-
         val bundle = i.getParcelableExtra<Bundle>("bundle")
         val latlng = bundle.getParcelable<LatLng>("location")
         Log.d("latlng",latlng.toString())
 
         //val txtLoc = mgeocorder.getFromLocation(latlng!!.latitude,latlng!!.longitude,1)[0]
 
-//        if(txtLoc.getAddressLine(0)!=null){
-//            textView6.setText(txtLoc.getAddressLine(0))
-//        }else{
-//            textView6.setText("주소 x")
-//        }
-//        Log.i("danger location", txtLoc.toString())
         val mgeocorder: Geocoder = Geocoder(this, Locale.getDefault())
 
         if (latlng != null) {

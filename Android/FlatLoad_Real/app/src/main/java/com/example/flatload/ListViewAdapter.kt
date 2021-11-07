@@ -23,18 +23,16 @@ class ListViewAdapter(val item: MutableList<ItemList>):BaseAdapter() {
             //val address = convertView.findViewById<TextView>(R.id.textview_list_address)
             val roadaddress = convertView.findViewById<TextView>(R.id.textview_list_roadaddress)
             val type = convertView.findViewById<TextView>(R.id.textview_list_type)
-
             val item: ItemList = item[position]
             name.text = item.title
             //address.text = item.address
             roadaddress.text = if (item.roadAddress.length == 0) item.address else item.roadAddress
             type.text = item.category
-
             //return convertView
         }
-//        convertView!!.image_title.setImageDrawable(item.icon)
-//        convertView.text_title.text = item.title
-//        convertView.text_sub_title.text = item.subTitle
+        //convertView!!.image_title.setImageDrawable(item.icon)
+        //convertView.text_title.text = item.title
+        //convertView.text_sub_title.text = item.subTitle
 
         return convertView
     }

@@ -15,8 +15,6 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLng
@@ -38,7 +36,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.HashMap
 
-
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -50,23 +47,16 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MapFragment : Fragment(), OnMapReadyCallback {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var naverMap: NaverMap
-    //private val mapView: MapView? = null
+
     private lateinit var mapView: MapView
     var latlngList = mutableListOf<LatLng>()
     var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
     var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
-    //private lateinit var viewModel : sharedViewModel
-    //private val viewModel: sharedViewModel by activityViewModels()
-//    private val viewModel: SharedViewModel by lazy {
-//        ViewModelProvider(requireActivity(), object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-//                SharedViewModel() as T
-//        }).get(SharedViewModel::class.java)
-//    }
+
     private val sharedViewModel:SharedViewModel by activityViewModels()
     private lateinit var cameraLatLng: LatLng
 
@@ -84,26 +74,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
-//    override fun onActivityCreated(savedInstanceState: Bundle?){
-//        super.onActivityCreated(savedInstanceState)
-//        val mapView = view?.findViewById(R.id.navermap) as MapView
-//        mapView.getMapAsync(this)
-//    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = view.findViewById(R.id.navermap) as MapView
-        //mapView.onCreate(savedInstanceState)
-//        sharedViewModel.routeLiveData.observe(this, Observer {
-//            parseRouteJson(it)
-//        })
-//        sharedViewModel.roadInfoLiveData.observe(viewLifecycleOwner, Observer {
-//            //로드뷰 정보
-//            Log.d("로드뷰 정보",it.toString())
-//        })
-//        sharedViewModel.dbInfoLiveData.observe(viewLifecycleOwner, Observer {
-//            //데이터베이스 정보
-//            Log.d("데이터베이스 정보",it.toString())
-//        })
         sharedViewModel.infoLiveData.observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(),"sharedViewModel", Toast.LENGTH_LONG).show()
             parsingInfo(it)
@@ -235,55 +209,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             }
         }
-
-        // 마커 추가
-//        val marker2 = Marker()
-//        marker2.position = LatLng(37.560046407129505, 126.9753292489345)
-//        //marker2.position = LatLng(37.57037156583255, 126.98314335390604)
-//        marker2.map = naverMap
-
         //val obstacle = findViewById<Button>(R.id.obstacle)
         obstacle.setOnClickListener {
             // 마커추가
             val marker = Marker()
             marker.position = LatLng(37.5670135, 126.9783740)
             marker.map = naverMap
-//            // RoadviewInfo 마커 띄우기 및 클릭이벤트 //
-//            if(list_RoadviewInfo.isNotEmpty()){
-//                for(i in 0 until list_RoadviewInfo.size){
-//                    val marker = Marker()
-//                    marker.position = list_RoadviewInfo[i].location
-//                    marker.map = naverMap
-//                    marker.setOnClickListener {
-//                        // RoadviewInfo 객체를 액티비티로 전달
-//                        val intent = Intent(activity,MarkerResultActivity::class.java)
-//                        val args = Bundle()
-//                        args.putParcelable("location",list_RoadviewInfo[i].location)
-//                        intent.putExtra("bundle", args)
-//
-//                        val decodedBytes = Base64.decode(list_RoadviewInfo[i].image,0)
-//                        //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-//                        intent.putExtra("image",decodedBytes)
-//                        startActivity(intent)
-//                        true
-//                    }
-//                }
-//            }
-//
-//            /////////////////////////////////////////
-//            // DatabaseInfo 마커 띄우기 및 클릭이벤트 //
-//            if(list_DatabaseInfo.isNotEmpty()){
-//                for(i in 0 until list_DatabaseInfo.size){
-//                    val marker2 = Marker()
-//                    marker2.position = list_DatabaseInfo[i].latlng
-//                    marker2.map = naverMap
-//                    marker2.setOnClickListener {
-//                        // DatabaseInfo 객체를 액티비티로 전달
-//
-//                        true
-//                    }
-//                }
-//            }
+
             // 현재 지도 화면의 좌표 출력
             val cameraPosition = naverMap.cameraPosition
             //Toast.makeText(this,cameraPosition.toString(), Toast.LENGTH_SHORT).show()
@@ -306,20 +238,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.i("화면좌표(오른쪽 아래 모서리)", projection.fromScreenLocation(PointF(width, height)).toString()) // 오른쪽 끝이 (1080,1920) = 현재 에뮬레이터의 크기 대로
             Log.i("화면좌표(오른쪽 위 모서리)",projection.fromScreenLocation(PointF(width, 0f)).toString())
             Log.i("화면좌표(왼쪽 아래 모서리)",projection.fromScreenLocation(PointF(0f,height)).toString())
-        // 나중에 메뉴 바의 높이 빼줘야함
 
         }
     }
+    //서버에서 받은 데이터 파싱
     private fun parsingInfo(result:Array<Array<JsonObject>>){
         var serverRouteInfo = result?.get(0)
         var serverRoadviewInfo = result?.get(1)
         var serverDatabaseInfo = result?.get(2)
-//        Log.d("serverRouteInfo",serverRouteInfo.get(0).toString())
-//        Log.d("serverRoadviewInfo",serverRoadviewInfo.get(0).toString())
+
         if (serverRouteInfo != null) {
             parseRouteJson(serverRouteInfo)
         }
-        //var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
+
         if (serverRoadviewInfo != null) {
             for(i in 0 until serverRoadviewInfo.size){
                 val jsonObject = serverRoadviewInfo[i]
@@ -342,26 +273,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val imgstr = list_RoadviewInfo.get(0).image
         Log.d("location",location.toString())
         Log.d("imgStr",imgstr.toString())
-        //changeActivity(location,imgstr)
-//        val intent = Intent(requireContext(),MarkerResultActivity::class.java)
-//        val location = list_RoadviewInfo.get(0).location
-//        val latlngintent = LatlngIntent(location)   //LatLngIntent 맵박스 LatLng -> 네이버 LatLng으로 변경
-//        val imgstr = list_RoadviewInfo.get(0).image
-//        intent.putExtra("markerLocation", latlngintent)
-//        intent.putExtra("imageString",imgstr)
-//        val args = Bundle()
-//        args.putParcelable("markerLocation",location)
-//        intent.putExtra("bundle", args)
-//
-//        val decodedBytes = Base64.decode(imgstr,0)
-//        //val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-//        intent.putExtra("image",decodedBytes)
-//        startActivity(intent)
-////        val i = Intent(this,MarkerResultActivity::class.java)
-////        val intent = Intent(this@Intent1,Intent2::class.java)
-//        intent.putExtra("num1",1) //데이터 넣기
-//        intent.putExtra("num2",2) //데이터 넣기
-//        startActivityForResult(intent,101)
 
         //var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
         if (serverDatabaseInfo != null) {
@@ -382,7 +293,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("list_DatabaseInfo 확인",list_DatabaseInfo.toString())
 
     }
-
 
     //경로json 파싱
     private fun parseRouteJson(route: Array<JsonObject>){
@@ -441,17 +351,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapView!!.onLowMemory()
     }
 
-
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MapFragment().apply {
@@ -461,7 +361,4 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
     }
-
-
-
 }

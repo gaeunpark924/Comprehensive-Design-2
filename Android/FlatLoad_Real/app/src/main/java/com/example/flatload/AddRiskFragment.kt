@@ -34,8 +34,6 @@ import java.io.FileOutputStream
 import java.lang.Exception
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
-import com.mapbox.geojson.Point
-//import kotlinx.android.synthetic.main.fragment_input_way.textviewJSONText
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -66,7 +64,7 @@ class AddRiskFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    val BASE_URL_FLAT_API = "http://3.35.209.27:8080"
+    val BASE_URL_FLAT_API = "http://3.36.64.66:8080"
 
     var permissions = arrayOf(
         Manifest.permission.CAMERA,
@@ -138,15 +136,9 @@ class AddRiskFragment : Fragment() {
         button_addrisk_data.setOnClickListener { view ->
             val mgeocorder = Geocoder(requireContext(), Locale.getDefault())
             //showexif 에서 계산한 실수는 float, latlng 은 double
-            //if (::metaDataLatLng.isInitialized){
             if(::locFinal.isInitialized){
                 println("위도"+locFinal.latitude.toString()+"경도"+locFinal.longitude.toString())
-                //println("위도"+metaDataLatLng.first.toDouble().toString()+"경도"+metaDataLatLng.second.toDouble().toString())
-//            try {
-//                txtLoc = mgeocorder.getFromLocation(metaDataLatLng.first.toDouble(),metaDataLatLng.second.toDouble(),1)[0]
-//            }catch(e : IOException){
-//                e.printStackTrace()
-//            }
+
                 var txtLoc : List<Address> = mgeocorder.getFromLocation(locFinal.latitude,locFinal.longitude,1)
                 if (txtLoc != null && txtLoc.size > 0){   //txtLoc가 null이 아니면서 txtLoc.size가 0인 경우가 있음....
                     var subtxtLoc = txtLoc.get(0)
@@ -158,10 +150,10 @@ class AddRiskFragment : Fragment() {
                     editText_addrisk_location.setText(locFinal.latitude.toString()+","+locFinal.longitude.toString())
                     Toast.makeText(requireContext(),"위치로 변환할 수 없는 좌표",Toast.LENGTH_SHORT).show()
                 }
-//            val txtLoc = mgeocorder.getFromLocation(metaDataLatLng.first.toDouble(),metaDataLatLng.second.toDouble(),1)[0]
-//            if(txtLoc.getAddressLine(0)!=null){
-//                editText_addrisk_location.setText(txtLoc.getAddressLine(0))
-//            }
+            //val txtLoc = mgeocorder.getFromLocation(metaDataLatLng.first.toDouble(),metaDataLatLng.second.toDouble(),1)[0]
+            //if(txtLoc.getAddressLine(0)!=null){
+            //    editText_addrisk_location.setText(txtLoc.getAddressLine(0))
+            //}
             } else{
                 Toast.makeText(requireContext(),"사진에 위치정보가 없음",Toast.LENGTH_SHORT).show()
             }
@@ -195,16 +187,12 @@ class AddRiskFragment : Fragment() {
                 var input = editText_addrisk_comment.text.toString()
                 textview_addrisk_countText.text = input.length.toString() + "/100"
             }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
-
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 var input = editText_addrisk_comment.text.toString()
                 textview_addrisk_countText.text = input.length.toString() + "/100"
             }
-
         })
     }
 
@@ -232,7 +220,6 @@ class AddRiskFragment : Fragment() {
 //        .addConverterFactory(ScalarsConverterFactory.create())
 //        .addConverterFactory(GsonConverterFactory.create(gson))
 //        .build()
-
     private fun testRetrofit(file: File){
         var requestBodyType : RequestBody = RequestBody.create(MediaType.parse("text/plain"),finalData.type)
         var requestBodyLocation : RequestBody = RequestBody.create(MediaType.parse("text/plain"),finalData.location)
@@ -326,12 +313,10 @@ class AddRiskFragment : Fragment() {
                             val displayName = cursor.getString(displayNameColumn)
                             val relativePath = cursor.getString(relativePathColumn)
                             mediaimage = mediaImage(id, displayName, relativePath)
-                            //Log.d("MYTEST", mediaimage.toString())
                             photoUri = ContentUris.withAppendedId(
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                 id
                             ) //mediastore URI
-                            //Log.d("MYTEST", "*" + photoUri.toString())
                             //viewModel.changeImageView(photoUri)            //CameraViewModel
                             setImageView(photoUri)
                             getAbsolutePath()

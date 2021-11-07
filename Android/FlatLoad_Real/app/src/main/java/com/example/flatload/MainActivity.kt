@@ -1,13 +1,13 @@
 package com.example.flatload
 
 import android.Manifest
-import android.content.Intent
+
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
+
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,11 +18,9 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val fragmentCommunity by lazy { CommunityFragment() }
     private val fragmentInputWay by lazy { InputWayFragment() }
     private val fragmentMap by lazy { MapFragment() }
     private val fragmentAddRisk by lazy { AddRiskFragment() }
-    //private val fragmentRocalSearch by lazy{ RocalSearchFragment()}
 
     var fusedLocationClient: FusedLocationProviderClient?= null
     var loc= LatLng(0.0,0.0)
@@ -31,33 +29,20 @@ class MainActivity : AppCompatActivity() {
 
     var manager = supportFragmentManager
     var active: Fragment = fragmentMap
-    //    var itemList = mutableListOf<ItemList>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val localAdapter = ListViewAdapter(itemList)
-//        listView.adapter = localAdapter
-        //supportFragmentManager.beginTransaction().replace(R.id.fl_container,fragmentMap).commit();
-        //changeFragment(fragmentMap)
         init()
         initLocation()
 
     }
     override fun onCreateOptionsMenu(menu: Menu):Boolean{
         super.onCreateOptionsMenu(menu)
-        //getMenuInflater().inflate(R.menu.menu_top,menu)
         setFragment(fragmentMap,"1")
         return true
     }
-//    override fun onOptionsItemSelected(item: MenuItem):Boolean{
-//        super.onOptionsItemSelected(item)
-//        when (item.itemId) {
-//            R.id.five ->{
-//                setFragment(fragmentRocalSearch,"1")
-//            }
-//        }
-//        return true
-//    }
+
     private fun init() {
         bnv_main.run {
             setOnItemSelectedListener {
@@ -69,10 +54,7 @@ class MainActivity : AppCompatActivity() {
                         setFragment(fragmentInputWay,"2")
                     }
                     R.id.third -> {
-                        setFragment(fragmentCommunity, "3")
-                    }
-                    R.id.four -> {
-                        setFragment(fragmentAddRisk, "4")
+                        setFragment(fragmentAddRisk, "3")
                     }
                 }
                 true
