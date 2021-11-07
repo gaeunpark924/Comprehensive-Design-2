@@ -24,6 +24,8 @@ Konkuk University  smartICTconvergence</br>
 <p align="center">
  <img src="./img/road2_1.jpg" width="180" height="350">
  <img src="./img/road2_2.jpg" width="180" height="350">
+</p>
+<p align="center"> 
  <img src="./img/road2_3.jpg" width="180" height="350">
  <img src="./img/road2_4.jpg" width="180" height="350">
  <img src="./img/road2_5.jpg" width="180" height="350">
