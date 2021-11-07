@@ -158,7 +158,7 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
     var destLon = parseFloat(dt[1]);
     var ROUTE_TYPE = Number(req.body.option);
     var tDistance = 0;
-
+    //Tmap API 요청	
     request({
         uri: "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
        method: "POST",
@@ -166,7 +166,7 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
             "appKey" : "",
             "startX" : startLon,
             "startY" : startLat,
-            "speed" : 25,  
+            "speed" : 0,  
             "endX" : destLon,
             "endY" : destLat,
             "searchOption" : ROUTE_TYPE,
@@ -182,16 +182,19 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
         console.log('Tmap statusCode:', response && response.statusCode); // 응답코드
   
         var resultData = body.features;
-        //결과 출력
+
         tDistance = ((resultData[0].properties.totalDistance) / 1000).toFixed(1);
         console.log("총 거리:"+tDistance+"km");
         
         var descriptionArr = [];
+	    
         let routeJson = new Object();
         routeJson.startx = String(startLat);
         routeJson.starty = String(startLon);
         routeJson.endx = String(destLat);
         routeJson.endy = String(destLon);
+	    
+	//경로 옵션    
         switch(ROUTE_TYPE){
             case 0:
                 routeJson.searchOption = "추천";
@@ -220,8 +223,6 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
                             routeArr.push(String(geometry.coordinates[j][1])+","+String(geometry.coordinates[j][0]));
                         }
                     }
-                } else if(geometry.type == "Point") {
-
                 }
             }
             routeArr.push(String(destLat)+","+String(destLon))
@@ -244,7 +245,7 @@ app.post('/android/post/point', function(req, res, next){ /* 접근 url -> ex) h
   //final_img_list = []; //앱으로 보낼 이미지 리스트
   database_img=[]; //데이터베이스에 저장된 위험요소 정보중 사용할 이미지의 리스트
   database_data=[]; //최종적으로 앱으로 보낼 사용자가 추가한 위험요소 정보들의 리스트 
-	
+  	
   function timeoutFunction(){
     console.log("send to android==> ",result) //result =  ['경도_위도.jpg','경도_위도.jpg',...]
     console.log("추가위험요소 정보 : "+database_data);
