@@ -1,0 +1,46 @@
+서버 준비 방법
+<Nodejs와 Express 설치>
+Nodejs와 Express 웹서버를 설치한다.
+
+<package.json 파일로 모듈 및 라이브러리 설치>
+nodejs/package.json 참조 파일을 자신의 프로젝트 폴더로 복사한다.
+npm install    	//참조 파일의 dependencies에 명시된 라이브러리 한번에 설치
+npm update  	//라이브러리 업데이트 명령어
+
+FlatRoad에서 사용하는 nodejs 라이브러리는 다음과 같다.
+"dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "file": "^0.2.2",
+    "fs": "0.0.1-security",
+    "grabzit": "*",
+    "multer": "^1.4.3",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "url": "^0.11.0"
+  }
+
+<grabzit API 사용 방법>
+1. Grabzit API의 application key와 application secret을 발급받는다.
+2. 도메인에 자신의 서버 ip를 추가한다.
+
+config.js 파일
+- config.applicationKey : application key
+- config.applicationSecret : application secret
+- config.callbackHandlerUrl : 서버 url
+- config.ip : 서버 ip
+
+*주의사항
+로컬 서버에서는 기능이 제대로 작동하지 않을 수 있다.
+무료 범위를 초과하면 API 호출이 불가하고 무료 호출 횟수가 다른 API에 비해 적은 편이다.
+
+<Tmap API 사용 방법>
+1. Tmap 홈페이지에서 프로젝트 생성 후 Tmap API의 project key 를 발급받는다.
+2. app.js 파일의 app.post('/android/post/point', ) 내부의 "appKey" 에 발급받은 key를 복사한다 
+
+<Kakao Maps API 사용 방법>
+1. Kakao Maps API의 Javascript 키를 발급받는다.
+2. Web 플랫폼에 자신의 웹페이지 도메인을 입력한다. 
+3. nodejs/view/index.ejs 파일의 <script src=""> 에 발급받은 key를 복사한다. 
+
