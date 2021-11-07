@@ -24,7 +24,7 @@ Konkuk University  smartICTconvergence</br>
 <p align="center">
  <img src="./img/road2_1.jpg" width="180" height="350">
  <img src="./img/road2_2.jpg" width="180" height="350">
- <img src="./img/road3.png" width="180" height="310">
+ <img src="./img/road2_3.jpg" width="180" height="350">
 </p>
 
 ### 2. 위험요소 추가 기능</br>
