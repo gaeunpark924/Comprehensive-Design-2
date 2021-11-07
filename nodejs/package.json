@@ -9,9 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "file": "^0.2.2",
+    "fs": "0.0.1-security",
     "grabzit": "*",
     "multer": "^1.4.3",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "url": "^0.11.0"
   }
 }
