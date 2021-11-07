@@ -20,8 +20,7 @@ Konkuk University  smartICTconvergence</br>
 
 ## 주요 기능🔧
 ### 1. 지도 서비스</br>
-> 사용자는 지도 서비스를 사용할 수 있다</br>
-현재 지도 위에 버튼을 추가하여 위험요소 정보를 제공하는 기능을 구현중이다.
+> 사용자는 앱을 실행하면 현재 위치의 지도를 볼 수 있다. 현재 지도 위에는 위험요소 정보 버튼이 추가되어 있고 관련된 기능을 개발하고 있다.  </br>
 <p align="center">
  <img src="./img/map2_1.jpg" width="180" height="350">
 </p>
