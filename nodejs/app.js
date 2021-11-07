@@ -32,6 +32,24 @@ function execute_SQL(query){
    });
 }
 
+//방위각 계산 공식
+// function getAngle(lat1, log1, lat2, log2) {
+//   //출발지
+//    var x1 = lat1 * Math.PI / 180;
+//    var x2 = lat2 * Math.PI / 180;
+//   //목적지
+//    var y1 = log1 * Math.PI / 180;
+//    var y2 = log2 * Math.PI /180;
+//   //위도, 경도를 라디안 단위로 변환
+//    var y = Math.sin(y2 - y1) * Math.cos(x2);
+//    var x = Math.cos(x1) * Math.sin(x2) - Math.sin(x1) * Math.cos(x2) * Math.cos(y2 - y1);
+//   //방위각 (라디안)
+//    var radian = Math.atan2(y, x);
+//   //방위각 (degree, 정규화)
+//    var bearing = (radian*180 /Math.PI + 360) % 360;
+//    return bearing;
+// };
+
 //const port = 3000;
 const config = require('./config.js');
 const grabzit = require('grabzit');
