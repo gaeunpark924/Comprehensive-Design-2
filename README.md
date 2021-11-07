@@ -26,6 +26,11 @@ Konkuk University  smartICTconvergence</br>
  <img src="./img/road2_2.jpg" width="180" height="350">
  <img src="./img/road2_3.jpg" width="180" height="350">
 </p>
+<p align="center">
+ <img src="./img/road2_4.jpg" width="180" height="350">
+ <img src="./img/road2_5.jpg" width="180" height="350">
+ <img src="./img/road2_6.jpg" width="180" height="350">
+</p>
 
 ### 2. 위험요소 추가 기능</br>
 > 사용자는 특정 장소의 이미지를 찍어 보행로 정보를 추가할 수 있다. 사용자는 위험요소가 존재하는 인도의 사진을 찍어 등록할 수 있다. 사용자가 등록한 정보와 이미지는 길찾기 서비스에 추가로 제공된다. </br>
