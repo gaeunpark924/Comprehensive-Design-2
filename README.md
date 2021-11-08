@@ -67,4 +67,5 @@ FlatRoad는 Apache-2.0 License 과 GPL-3.0 License를 사용한다. 자세한 �
 
 ## 시연영상
 [1차 시연영상](https://www.youtube.com/watch?v=bL4Xart6Yi8)
+[2차 시연영상](https://youtu.be/4t4DuQ0-9Ak)
 
