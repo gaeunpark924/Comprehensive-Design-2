@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="5dp"
+        android:gravity="center_horizontal"
         tools:context=".InputWayActivity">
 
         <TextView
@@ -130,22 +131,30 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_style"
                 android:text="취소" />
+            <Button
+                android:id="@+id/button_inputway_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_style"
+                android:text="ON" />
         </LinearLayout>
-
-<!--        <TextView-->
-<!--            android:id="@+id/textviewJSONText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" />-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView_inputway_speech"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"/>
+        </ScrollView>
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:scrollbars="none"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
             android:divider="@null"/>
-
     </LinearLayout>
 
 </FrameLayout>

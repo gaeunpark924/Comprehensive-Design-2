@@ -15,6 +15,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLng
@@ -26,6 +27,7 @@ import com.naver.maps.map.overlay.PolylineOverlay
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.android.synthetic.main.fragment_input_way.*
 import kotlinx.android.synthetic.main.fragment_map.*
+import okhttp3.OkHttpClient
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
@@ -35,6 +37,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.HashMap
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,6 +59,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var latlngList = mutableListOf<LatLng>()
     var list_RoadviewInfo = arrayListOf<RoadviewInfo>()
     var list_DatabaseInfo = arrayListOf<DatabaseInfo>()
+
+    val okHttpClient = OkHttpClient.Builder()
+        .readTimeout(15, TimeUnit.MINUTES)
+        .build();
+    val BASE_URL_FLAT_API ="http://52.79.116.119:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
+    val gson = GsonBuilder().setLenient().create()
 
     private val sharedViewModel:SharedViewModel by activityViewModels()
     private lateinit var cameraLatLng: LatLng
@@ -239,7 +248,45 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.i("화면좌표(오른쪽 위 모서리)",projection.fromScreenLocation(PointF(width, 0f)).toString())
             Log.i("화면좌표(왼쪽 아래 모서리)",projection.fromScreenLocation(PointF(0f,height)).toString())
 
+            sendToServerMapCoord(projection.fromScreenLocation(PointF(width, 0f)),
+                        projection.fromScreenLocation(PointF(0f, 0f)),
+                        projection.fromScreenLocation(PointF(0f,height)),
+                        projection.fromScreenLocation(PointF(width, height)))
         }
+    }
+    private fun sendToServerMapCoord(oneLatLng:LatLng, twoLatLng:LatLng, threeLatLng:LatLng, fourLatLng:LatLng){
+        var coordOne = oneLatLng.latitude.toString()+","+oneLatLng.longitude.toString()
+        var coordTwo = twoLatLng.latitude.toString()+","+twoLatLng.longitude.toString()
+        var coordThree = threeLatLng.latitude.toString()+","+threeLatLng.longitude.toString()
+        var coordFour = fourLatLng.latitude.toString()+","+fourLatLng.longitude.toString()
+        val api2 = Retrofit.Builder()
+            .baseUrl(BASE_URL_FLAT_API).client(okHttpClient) //"http://192.168.219.107:8080/" http://10.0.2.2:8080 http://192.168.219.107:8080/
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        val client = api2.create(FlatAPI::class.java)
+        client.postMapCoord(coordOne,coordTwo,coordThree,coordFour).enqueue(object : Callback <String> {
+            override fun onResponse(call: Call <String> , response: Response <String> ) {
+                if (response?.isSuccessful){
+                    Toast.makeText(requireContext(), "지도 좌표 전송 성공", Toast.LENGTH_SHORT).show()
+                    if ( response != null ){
+                        var result = response.body()
+                        if (result != null){
+                            //경로가 비어있는 경우
+                            Log.d("성공 onResponse 안","")
+                        }
+                    }
+                }else{
+                    Log.d("실패 onResponse 안","")
+                    //Toast.makeText(requireContext(), "onResponse ", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("실패 onFailure 안", t.message)
+                Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
+                //finish()
+            }
+        })
     }
     //서버에서 받은 데이터 파싱
     private fun parsingInfo(result:Array<Array<JsonObject>>){

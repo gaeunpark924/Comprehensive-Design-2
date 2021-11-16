@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FLATROAD</string>
+    <string name="app_name">평지</string>
     <string name="access_token">pk.eyJ1IjoicWtycmtkbXM5MjQiLCJhIjoiY2ttbmp3MjFiMXcxZDJwbDgzaGwyeTBwcCJ9.lxalFHLwiSXVMvkJrdOkGQ</string>
     <string name="access_token_naver_rocal">60iaETGNQt</string>
     <string name="client_id_naver_rocal">Vy8YJEUl4KlBNsGHqUdB</string>

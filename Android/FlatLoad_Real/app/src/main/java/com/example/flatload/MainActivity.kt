@@ -1,21 +1,21 @@
 package com.example.flatload
 
 import android.Manifest
-
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
+import android.util.Base64
 import android.util.Log
 import android.view.Menu
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
+import java.security.MessageDigest
+
 
 class MainActivity : AppCompatActivity() {
     private val fragmentInputWay by lazy { InputWayFragment() }
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        getAppKeyHash()
         init()
         initLocation()
 
@@ -169,6 +170,21 @@ class MainActivity : AppCompatActivity() {
         }
         bnv_main.menu.getItem(tag.toInt()-1).setChecked(true)
         active = fragment
+    }
+    private fun getAppKeyHash() {
+        try {
+            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                var md: MessageDigest
+                md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val something: String = String(Base64.encode(md.digest(), 0))
+                Log.e("Hash key", something)
+            }
+        } catch (e: Exception) {
+            // TODO Auto-generated catch block
+            Log.e("name not found", e.toString())
+        }
     }
 
 }

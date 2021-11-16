@@ -55,4 +55,13 @@ interface FlatAPI {
         //@QueryMap query :HashMap<String, RequestBody>
         @QueryMap query :HashMap<String, String>
     ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/android/post/map/coordinate")
+    fun postMapCoord(
+        @Field("one") one: String,
+        @Field("two") two: String,
+        @Field("three") three: String,
+        @Field("four") four: String
+    ): Call<String>
 }
