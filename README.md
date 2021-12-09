@@ -69,9 +69,8 @@ Konkuk University  smartICTconvergence</br>
 FlatRoad는 Apache-2.0 License 과 GPL-3.0 License를 사용한다. 자세한 사항은 [LICENSE](https://github.com/gaeunpark924/ComprehensiveDesign2/blob/main/LICENSE) 를 따른다.
 
 ## 시연영상
-1) 공개SW개발자대회 2차
+* 공개SW개발자대회 본선
   - [시연영상](https://youtu.be/4t4DuQ0-9Ak)
-3) SW중심대학사업단 SW경진대회 2차
+* SW중심대학사업단 SW경진대회 본선
   - [시연영상](https://www.youtube.com/watch?v=tuVqONCSgxg)
-  - 음성인식 기능 추가
-
+  - 음성인식, 위험요소 버튼, 커뮤니티 기능이 추가됨
