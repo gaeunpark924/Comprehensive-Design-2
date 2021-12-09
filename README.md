@@ -73,4 +73,4 @@ FlatRoad는 Apache-2.0 License 과 GPL-3.0 License를 사용한다. 자세한 �
   - [시연영상](https://youtu.be/4t4DuQ0-9Ak)
 * SW중심대학사업단 SW경진대회 본선
   - [시연영상](https://www.youtube.com/watch?v=tuVqONCSgxg)
-  - 음성인식, 위험요소 버튼, 커뮤니티 기능이 추가됨
+  - 음성인식, 위험요소 버튼, 커뮤니티 기능 추가됨
