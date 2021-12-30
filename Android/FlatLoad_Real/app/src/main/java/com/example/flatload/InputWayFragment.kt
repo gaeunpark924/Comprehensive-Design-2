@@ -33,6 +33,7 @@ import com.naver.maps.geometry.Tm128
 import kotlinx.android.synthetic.main.fragment_input_way.*
 import okhttp3.OkHttpClient
 import org.json.JSONObject
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +63,7 @@ class InputWayFragment : Fragment() {
     val okHttpClient = OkHttpClient.Builder()
         .readTimeout(15, TimeUnit.MINUTES)
         .build();
-    val BASE_URL_FLAT_API ="http://52.79.116.119:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
+    val BASE_URL_FLAT_API ="http://13.125.252.44:8080/" //"http://15.164.166.74:8080"(민영) //"http://10.0.2.2:3000"(에뮬레이터-로컬서버 통신)
     val gson = GsonBuilder().setLenient().create()
 
     lateinit var origin: LatLng
@@ -71,16 +72,16 @@ class InputWayFragment : Fragment() {
 
     var itemList = mutableListOf<ItemList>()
     //음성 인식 전역 변수
-    var ROUTE_OPTIONS = false
-    var YES_NO = false
+    var routeSelected = false
+    var answerYesNo = false
+    //var YES_NO = false
     var ttsClient : TextToSpeechClient? = null
-//    var builder = null
-//        //.setServiceType(SpeechRecognizerClient.SERVICE_TYPE_LOCAL)
-//    var sttclient = null
+
     var builder = SpeechRecognizerClient.Builder()
         .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_LOCAL)
     var sttclient = builder.build()
     val handler = Handler(Looper.getMainLooper())
+    lateinit var mgeocorder: Geocoder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,12 +98,13 @@ class InputWayFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_input_way, container, false)
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //처음에 gps 허용
         //내위치 누르면 현재 위치로 설정
         //확인 버튼 누르면 출발지, 도착지 -> 위도 경도로 변경
-        val mgeocorder: Geocoder = Geocoder(requireContext(), Locale.getDefault())
+        mgeocorder = Geocoder(requireContext(), Locale.getDefault())
         val items = resources.getStringArray(R.array.route_type)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
         val inputMethodManager = getContext()?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -185,167 +187,33 @@ class InputWayFragment : Fragment() {
             }
             //listView.setVisibility(View.INVISIBLE)
         }
+        //var permission_network = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_NETWORK_STATE)
+        //var permission_internet = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.INTERNET)
+
         button_inputway_voice.setOnClickListener { view->
             var permission_audio = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
             var permission_storage = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            var permission_network = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_NETWORK_STATE)
-            var permission_internet = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.INTERNET)
 
-            if(permission_audio != PackageManager.PERMISSION_GRANTED &&
-                permission_storage != PackageManager.PERMISSION_GRANTED
-            ) {
-                Log.d("Kakao", "Permission to recode denied")
+            if (permission_audio != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+            }
+            if (permission_storage != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-            } else {
-                //음성인식과 음성합성 초기화
+            }
+                //음성인식과 음성합성 SDK 초기화
                 SpeechRecognizerManager.getInstance().initializeLibrary(requireContext())
                 TextToSpeechManager.getInstance().initializeLibrary(requireContext())
+
                 editText_inputway_start.text.clear()
                 editText_inputway_end.text.clear()
-//                builder = SpeechRecognizerClient.Builder()
-//                    .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_LOCAL)
-//                sttclient = builder.build()
-                //TTS 클라이언트 생성
-//                ttsClient = TextToSpeechClient.Builder()
-//                    .setSpeechMode(TextToSpeechClient.NEWTONE_TALK_1)      // 음성합성방식
-//                    .setSpeechSpeed(0.9)                                    // 발음 속도(0.5~4.0)
-//                    .setSpeechVoice(TextToSpeechClient.VOICE_MAN_READ_CALM)  //TTS 음색 모드 설정
-//                    .setListener(object : TextToSpeechListener {
-//                        //음성합성이 종료될 때 호출된다.
-//                        override fun onFinished() {
-//                            val intSentSize = ttsClient?.getSentDataSize()      //세션 중에 전송한 데이터 사이즈
-//                            val intRecvSize = ttsClient?.getReceivedDataSize()  //세션 중에 전송받은 데이터 사이즈
-//                            val strInacctiveText = "handleFinished() SentSize : $intSentSize  RecvSize : $intRecvSize"
-//                            ttsClient?.stop()
-//                            handler.postDelayed(Runnable {
-//                                sttclient.startRecording(true)
-//                            }, 0)
-//                            //speechToText()
-//                            Log.i("kakao", strInacctiveText)
-//                        }
-//                        override fun onError(code: Int, message: String?) {
-//                            Log.d("kakao", code.toString())
-//                        }
-//                    })
-//                    .build()
-//                val handler = Handler(Looper.getMainLooper())
-//                //STT 클라이언트 생성
-//                sttclient.setSpeechRecognizeListener(object : SpeechRecognizeListener {
-//                    override fun onReady() {
-//                        handler.postDelayed(Runnable {
-//                            val toast = Toast.makeText(requireContext(), "지금부터 말을 해주세요", Toast.LENGTH_SHORT)
-//                            toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL) //토스트메시지 위치
-//                            val group = toast.view as ViewGroup
-//                            val msgTextView = group.getChildAt(0) as TextView
-//                            msgTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f) //글자 크기
-//                            toast.show()
-//                        }, 0)
-//                    }
-//                    override fun onBeginningOfSpeech() {
-//                        //Log.d("kakao", "말하기 시작")
-//                    }
-//                    override fun onEndOfSpeech() {
-//                        handler.postDelayed(Runnable {
-//                            val toast = Toast.makeText(requireContext(), "종료되었습니다", Toast.LENGTH_SHORT)
-//                            toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL) //토스트메시지 위치
-//                            val group = toast.view as ViewGroup
-//                            val msgTextView = group.getChildAt(0) as TextView
-//                            msgTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f) //글자 크기
-//                            toast.show()
-//                        }, 0)
-//                        //Log.d("kakao", "말하기 종료. 데이터 전달")
-//                    }
-//                    override fun onPartialResult(partialResult: String?) {
-//                        //Log.d("kakao", "인식된 문자열:" + partialResult)
-//                        textView_inputway_speech.setText(partialResult)
-//                    }
-//                    override fun onResults(results: Bundle?) {
-//                        val texts = results?.getStringArrayList(SpeechRecognizerClient.KEY_RECOGNITION_RESULTS)
-//                        val confs = results?.getIntegerArrayList(SpeechRecognizerClient.KEY_CONFIDENCE_VALUES)
-//
-//                        //Log.d("kakao", texts?.get(0).toString())
-//                        //정확도가 높은 첫번째 결과값을 텍스트뷰에 출력
-//                        activity?.runOnUiThread {
-//                            textView_inputway_speech.setText(texts?.get(0))
-//                            //출발지, 도착지 확인
-//                            if (texts?.get(0) =="네" || texts?.get(0) == "예"){
-//                                sttclient.cancelRecording()
-//                                Log.d("************","네라고 대답함")
-//                                textToSpeech()
-//                                YES_NO = false
-//                            }else if(texts?.get(0) =="아니오" || texts?.get(0) == "아니요") {
-//                                sttclient.cancelRecording()
-//                                if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) &&
-//                                    TextUtils.isEmpty(editText_inputway_end.getText().toString())
-//                                ) {
-//                                    editText_inputway_start.text.clear()
-//                                } else if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) &&
-//                                    !(TextUtils.isEmpty(editText_inputway_end.getText().toString()))
-//                                ) {
-//                                    editText_inputway_end.text.clear()
-//                                }
-//                                ttsClient?.setSpeechText("다시 말해주세요")
-//                                ttsClient?.play()
-//                                YES_NO = false
-//                            }else if(texts?.get(0) =="확인"){
-//                                //sendToServerLatLng(origin, destination, routeOption)
-//                            }else if(texts?.get(0) =="취소") {
-//                                editText_inputway_start.text.clear()
-//                                editText_inputway_end.text.clear()
-//                                spinner.setSelection(0)
-//                                textView_inputway_speech.setVisibility(View.INVISIBLE)
-//                            }else{
-//                                if (TextUtils.isEmpty(editText_inputway_start.getText().toString())||
-//                                    TextUtils.isEmpty(editText_inputway_end.getText().toString())) {
-//                                    texts?.get(0)?.let { getRocal(it) }
-//                                    sttclient.cancelRecording()
-//                                }else{
-//                                    when(texts?.get(0)){
-//                                        "기본" -> {
-//                                            spinner.setSelection(0)
-//                                            routeOption = "0"   //기본(선택안함)
-//                                        }
-//                                        "대로우선" -> {
-//                                            spinner.setSelection(1)
-//                                            routeOption = "4"   //대로우선
-//                                        }
-//                                        "최단거리" -> {
-//                                            spinner.setSelection(2)
-//                                            routeOption = "10"   //최단거리
-//                                        }
-//                                        "계단제외" -> {
-//                                            spinner.setSelection(3)
-//                                            routeOption = "30"   //계단제외
-//                                        }
-//                                        else -> {
-//                                            spinner.setSelection(0)
-//                                            routeOption = "0"
-//                                        }
-//                                    }
-//                                    ROUTE_OPTIONS = true
-//                                    sttclient.cancelRecording()
-//                                    textToSpeech()
-//                                }
-//                            }
-//                        }
-//                    }
-//                    override fun onAudioLevel(audioLevel: Float) {
-//                        //Log.d(TAG, "Audio Level(0~1): " + audioLevel.toString())
-//                    }
-//                    override fun onError(errorCode: Int, errorMsg: String?) {
-//                        Log.d("kakao", "Error: " + errorMsg)
-//                    }
-//                    override fun onFinished() {
-//                        //Log.d("kakao", "Finished")
-//                    }
-//                })
-                textView_inputway_speech.setText("")
-                textView_inputway_speech.setVisibility(View.VISIBLE)
-                ROUTE_OPTIONS=false
-                YES_NO=false
+                //클라이언트 생성
+                builder = SpeechRecognizerClient.Builder()
+                    .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_LOCAL)
+                sttclient = builder.build()
+
+                textToSpeechClient()
                 textToSpeech()
-            }
+
         }
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -353,18 +221,27 @@ class InputWayFragment : Fragment() {
                 when(position) {
                     0 -> {
                         routeOption = "0"   //기본(선택안함)
+                        routeSelected = false;
                     }
                     1 -> {
                         routeOption = "4"   //대로우선
+                        routeSelected = true;
+
                     }
                     2 -> {
                         routeOption = "10"   //최단거리
+                        routeSelected = true;
+;
                     }
                     3 -> {
                         routeOption = "30"   //계단제외
+                        routeSelected = true;
+
                     }
                     else -> {
                         routeOption = "0"
+                        routeSelected = true;
+
                     }
                 }
             }
@@ -388,65 +265,59 @@ class InputWayFragment : Fragment() {
         super.onDestroy()
         SpeechRecognizerManager.getInstance().finalizeLibrary()
     }
-    private fun textToSpeech(){
-        //TTS 클라이언트 생성
+
+    private fun textToSpeechClient(){
         ttsClient = TextToSpeechClient.Builder()
-            .setSpeechMode(TextToSpeechClient.NEWTONE_TALK_1)     // 음성합성방식
-            .setSpeechSpeed(0.9)                                  // 발음 속도
-            .setSpeechVoice(TextToSpeechClient.VOICE_MAN_READ_CALM)  //TTS 음색 모드 설정(여성 차분한 낭독체)
+            .setSpeechMode(TextToSpeechClient.NEWTONE_TALK_1)     //음성합성방식
+            .setSpeechSpeed(0.9)                                  //발음속도
+            .setSpeechVoice(TextToSpeechClient.VOICE_MAN_READ_CALM)//TTS 음색모드 설정(여성 차분한 낭독체)
             .setListener(object : TextToSpeechListener {
-                //음성합성이 종료될 때 호출된다.
+                //음성합성이 종료될 때 호출
                 override fun onFinished() {
-                    val intSentSize = ttsClient?.getSentDataSize()      //세션 중에 전송한 데이터 사이즈
-                    val intRecvSize = ttsClient?.getReceivedDataSize()  //세션 중에 전송받은 데이터 사이즈
+                    val intSentSize = ttsClient?.getSentDataSize()     //세션 중에 전송한 데이터 사이즈
+                    val intRecvSize = ttsClient?.getReceivedDataSize() //세션 중에 전송받은 데이터 사이즈
                     val strInacctiveText = "handleFinished() SentSize : $intSentSize  RecvSize : $intRecvSize"
                     ttsClient?.stop()
-//                    handler.postDelayed(Runnable {
-//                        sttclient.startRecording(true)
-//                    }, 0)
                     speechToText()
-                    Log.i("kakao", strInacctiveText)
+                    Log.d("kakao",strInacctiveText)
                 }
                 override fun onError(code: Int, message: String?) {
                     Log.d("kakao", code.toString())
                 }
             })
             .build()
-        //음성 textview가 비어있지 않으면
+    }
+    private fun textToSpeech(){
+        //출발지&도착지&경로옵션
         if (TextUtils.isEmpty(editText_inputway_start.getText().toString())) {
-            ttsClient?.setSpeechText("출발지를 말해주세요")
+            Log.d("출력","출발지")
+            ttsClient?.setSpeechText("출발지를 말해주세요 현재 위치로 설정하고 싶으면 현재 위치라고 말해주세요")
             ttsClient?.play()
-        }else if(TextUtils.isEmpty(editText_inputway_end.getText().toString())){
+        } else if(TextUtils.isEmpty(editText_inputway_end.getText().toString())){
             ttsClient?.setSpeechText("도착지를 말해주세요")
             ttsClient?.play()
-        }else if(ROUTE_OPTIONS==false){
-            //STT 클라리언트 build
-//            builder  = SpeechRecognizerClient.Builder()
-//                    .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
-//                    .setUserDictionary("기본\n대로우선\n최단거리\n계단제외")
-//            sttclient = builder.build()
-            ttsClient?.setSpeechText("경로옵션을 기본, 대로우선, 최단거리, 계단제외 중에서 하나 선택해주세요")
-            ttsClient?.play()
-        }else if(ROUTE_OPTIONS==true){
-            //STT 클라리언트 build
-//            builder  = SpeechRecognizerClient.Builder()
-//                .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
-//                .setUserDictionary("확인\n취소")
-//            sttclient = builder.build()
-            ttsClient?.setSpeechText("길찾기 시작을 원하면 '확인', 원하지 않으면 '취소'라고 말해주세요")
-            ttsClient?.play()
+        } else {
+            if (!routeSelected) {
+                ttsClient?.setSpeechText("경로옵션을 기본, 대로우선, 최단거리, 계단제외 중에서 하나 선택해주세요")
+                ttsClient?.play()
+            } else {
+                ttsClient?.setSpeechText("길찾기 시작을 원하면 '확인', 원하지 않으면 '취소'라고 말해주세요")
+                ttsClient?.play()
+            }
         }
     }
     private fun speechToText(){
-        if (YES_NO == true){
-            builder  = SpeechRecognizerClient.Builder()
-                .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
-                .setUserDictionary("네\n예\n아니오\n아니요")
-        } else if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())||
-            TextUtils.isEmpty(editText_inputway_end.getText().toString()))) {
-            builder  = SpeechRecognizerClient.Builder()
-                .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
-                .setUserDictionary("기본\n대로우선\n최단거리\n계단제외")
+        if (!TextUtils.isEmpty(editText_inputway_start.getText().toString())
+            &&!TextUtils.isEmpty(editText_inputway_end.getText().toString())){
+            if(!routeSelected) {
+                builder = SpeechRecognizerClient.Builder()
+                    .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
+                    .setUserDictionary("기본\n대로우선\n최단거리\n계단제외")
+            }else if(!answerYesNo){
+                builder = SpeechRecognizerClient.Builder()
+                    .setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WORD)
+                    .setUserDictionary("네\n예\n아니오\n아니요")
+            }
         }
         sttclient = builder.build()
 
@@ -483,37 +354,33 @@ class InputWayFragment : Fragment() {
             override fun onResults(results: Bundle?) {
                 val texts = results?.getStringArrayList(SpeechRecognizerClient.KEY_RECOGNITION_RESULTS)
                 val confs = results?.getIntegerArrayList(SpeechRecognizerClient.KEY_CONFIDENCE_VALUES)
-                //Log.d("kakao", texts?.get(0).toString())
                 //정확도가 높은 첫번째 결과값을 텍스트뷰에 출력
                 activity?.runOnUiThread {
                     textView_inputway_speech.setText(texts?.get(0))
-                    //확인
-                    if (YES_NO == true){
                         if (texts?.get(0) == "네" || texts?.get(0) == "예" || texts?.get(0) == "넥" ||
                             texts?.get(0) == "넵" || texts?.get(0) == "근데"){
                             sttclient.cancelRecording()
                             textToSpeech()
-                            YES_NO=false
+                            answerYesNo = true
                         }else if(texts?.get(0) =="아니오" || texts?.get(0) == "아니요") {
                             sttclient.cancelRecording()
-                            if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) && TextUtils.isEmpty(editText_inputway_end.getText().toString())) { // 출발지 다시
+
+                            if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) &&
+                                 TextUtils.isEmpty(editText_inputway_end.getText().toString())) { // 출발지 다시
                                 editText_inputway_start.text.clear()
-                            } else if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) && !(TextUtils.isEmpty(editText_inputway_end.getText().toString()))) {
-                                if (ROUTE_OPTIONS==true){ //경로 옵션 다시
+                            } else if (!(TextUtils.isEmpty(editText_inputway_start.getText().toString())) &&
+                                !(TextUtils.isEmpty(editText_inputway_end.getText().toString()))) {
+                                if (routeSelected){ //경로 옵션 다시
                                     spinner.setSelection(0)
                                 }else{                   //도착지 다시
                                     editText_inputway_end.text.clear()
                                 }
                             }
+                            //출발지
                             ttsClient?.setSpeechText("다시 말해주세요")
                             ttsClient?.play()
-                            YES_NO=false
-                        }
-                    }else if(texts?.get(0) =="확인"){
+                        } else if(texts?.get(0) =="확인"){
                         sttclient.cancelRecording()
-                        Log.d("origin",origin.toString())
-                        Log.d("destination",destination.toString())
-                        Log.d("routeOption",routeOption)
                         sendToServerLatLng(origin, destination, routeOption)
                     }else if(texts?.get(0) =="취소") {
                         sttclient.cancelRecording()
@@ -523,37 +390,49 @@ class InputWayFragment : Fragment() {
                         textView_inputway_speech.setVisibility(View.INVISIBLE)
                     }else{
                         if (TextUtils.isEmpty(editText_inputway_start.getText().toString())|| TextUtils.isEmpty(editText_inputway_end.getText().toString())) {
-                            texts?.get(0)?.let { getRocal(it) }
+                            if (texts?.get(0)=="현재 위치"){
+                                val txtLoc = mgeocorder.getFromLocation((activity as MainActivity).loc.latitude,(activity as MainActivity).loc.longitude,1)[0]
+                                origin = LatLng((activity as MainActivity).loc.latitude,(activity as MainActivity).loc.longitude)
+                                if(txtLoc.getAddressLine(0)!=null){
+                                    editText_inputway_start.setText(txtLoc.getAddressLine(0))
+                                }
+                                textToSpeech()
+                            }else {
+                                texts?.get(0)?.let { getRocal(it) }
+                            }
                             sttclient.cancelRecording()
                         }else{
                             when(texts?.get(0)){
                                 "기본" -> {
                                     spinner.setSelection(0)
                                     routeOption = "0"   //기본(선택안함)
+                                    routeSelected = true
                                 }
                                 "대로우선" -> {
                                     spinner.setSelection(1)
                                     routeOption = "4"   //대로우선
+                                    routeSelected = true
                                 }
                                 "최단거리" -> {
                                     spinner.setSelection(2)
                                     routeOption = "10"   //최단거리
+                                    routeSelected = true
                                 }
                                 "계단제외" -> {
                                     spinner.setSelection(3)
                                     routeOption = "30"   //계단제외
+                                    routeSelected = true
                                 }
                                 else -> {
                                     spinner.setSelection(0)
                                     routeOption = "0"
+                                    routeSelected = true
                                 }
                             }
+                            answerYesNo = true
                             sttclient.cancelRecording()
                             ttsClient?.setSpeechText("경로 옵션은 "+texts?.get(0)+" 입니다. 맞으면 네 틀리면 아니오라고 말해주세요.")
                             ttsClient?.play()
-                            ROUTE_OPTIONS = true
-                            YES_NO = true
-                            //textToSpeech()
                         }
                     }
                 }
@@ -571,7 +450,6 @@ class InputWayFragment : Fragment() {
         handler.postDelayed(Runnable {
             sttclient.startRecording(true)
         }, 0)
-
     }
     // 서버로 좌표 전송
     private fun sendToServerLatLng(startLatLng: LatLng, destLatLng: LatLng, routeOption:String){
@@ -679,16 +557,17 @@ class InputWayFragment : Fragment() {
                                 origin = LatLng(tm128.toLatLng().latitude,tm128.toLatLng().longitude)
                                 ttsClient?.setSpeechText("출발지는 "+itemList[0].roadAddress+" 입니다. 맞으면 네 틀리면 아니오라고 말해주세요.")
                                 ttsClient?.play()
-                                YES_NO = true
+                                //YES_NO = true
                                 //textToSpeech()
                             }else{
+                                Log.d("도착지","도착지는")
                                 editText_inputway_end.setText(itemList[0].roadAddress)
                                 textView_inputway_speech.setText(textView_inputway_speech.text.toString()+
                                         "\n도착지는 "+itemList[0].roadAddress+" 입니다.")
                                 destination = LatLng(tm128.toLatLng().latitude,tm128.toLatLng().longitude)
                                 ttsClient?.setSpeechText("도착지는 "+itemList[0].roadAddress+" 입니다. 맞으면 네 틀리면 아니오라고 말해주세요.")
                                 ttsClient?.play()
-                                YES_NO = true
+                                //YES_NO = true
                             }
                         }
                     }

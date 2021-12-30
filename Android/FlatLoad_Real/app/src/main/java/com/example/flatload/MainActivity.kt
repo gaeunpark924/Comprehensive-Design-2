@@ -13,11 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.naver.maps.map.overlay.LocationOverlay
 import kotlinx.android.synthetic.main.activity_main.*
 import java.security.MessageDigest
 
 
 class MainActivity : AppCompatActivity() {
+    private val fragmentCommunity by lazy { CommunityFragment() }
     private val fragmentInputWay by lazy { InputWayFragment() }
     private val fragmentMap by lazy { MapFragment() }
     private val fragmentAddRisk by lazy { AddRiskFragment() }
@@ -55,7 +57,10 @@ class MainActivity : AppCompatActivity() {
                         setFragment(fragmentInputWay,"2")
                     }
                     R.id.third -> {
-                        setFragment(fragmentAddRisk, "3")
+                        setFragment(fragmentCommunity, "3")
+                    }
+                    R.id.four -> {
+                        setFragment(fragmentAddRisk, "4")
                     }
                 }
                 true
@@ -124,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                 locationResult ?: return
                 for(location in locationResult.locations){
                     loc= LatLng(location.latitude,location.longitude)
+                    //if(this::locationOverlay.isInitialized)
                     Log.i("changeLocation",loc.toString())
                 }
             }

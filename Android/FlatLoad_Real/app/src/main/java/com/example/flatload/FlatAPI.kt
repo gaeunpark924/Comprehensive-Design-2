@@ -63,5 +63,5 @@ interface FlatAPI {
         @Field("two") two: String,
         @Field("three") three: String,
         @Field("four") four: String
-    ): Call<String>
+    ): Call<Array<JsonObject>>
 }

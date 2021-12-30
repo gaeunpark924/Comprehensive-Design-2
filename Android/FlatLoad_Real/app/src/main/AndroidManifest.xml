@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -52,7 +51,7 @@
         </provider>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="01b51ad45fe5fe54f465bcabefdfd8d0"/>
+            android:value="@string/app_key_kakao"/>
     </application>
 
 </manifest>
