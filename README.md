@@ -45,7 +45,11 @@ Konkuk University  smartICTconvergence</br>
 
 #### 음성 인식
 > 사용자는 음성만으로 길찾기 기능을 사용할 수 있다. 길찾기 서비스에 필요한 출발지, 도착지, 경로 옵선 정보를 음성으로 입력한다. 길찾기 결과인 위험요소와 3m이내로 가까워지면 위험요소와의 직선 거리를 음성으로 알려준다.
-> 
+<p align="center"> 
+ <img src="./img/speek_1.jpg" width="180" height="350">
+ <img src="./img/speek_2.jpg" width="180" height="350">
+ <img src="./img/speek_3.jpg" width="180" height="350">
+</p>
 
 ### 3. 위험요소 추가 기능</br>
 > 사용자는 특정 장소의 이미지를 찍어 보행로 정보를 추가할 수 있다. 사용자는 위험요소가 존재하는 인도의 사진을 찍어 등록할 수 있다. 사용자가 등록한 정보와 이미지는 길찾기 서비스에 추가로 제공된다. </br>
