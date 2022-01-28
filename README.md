@@ -40,12 +40,12 @@
      - 경로에서 인식된 볼라드의 위치는 느낌표 모양의 마커로 표시하고 경로 주변의 위험요소 정보의 위치는 초록색 마커로 표시됩니다.
      - 각각의 마커를 클릭하면 로드뷰 화면과 위험요소 정보 화면으로 이동하고 해당 좌표의 로드뷰 사진과 위험요소 이름을 사용자에게 알려줍니다.
  <p align="center">
- <img src="./img/road2_1.jpg" width="150">
- <img src="./img/road2_2.jpg" width="150">
- <img src="./img/road2_3.jpg" width="150">
- <img src="./img/road2_4.jpg" width="150">
- <img src="./img/road2_5.jpg" width="150">
- <img src="./img/road2_6.jpg" width="150">
+ <img src="./img/road2_1.jpg" width="120">
+ <img src="./img/road2_2.jpg" width="120">
+ <img src="./img/road2_3.jpg" width="120">
+ <img src="./img/road2_4.jpg" width="120">
+ <img src="./img/road2_5.jpg" width="120">
+ <img src="./img/road2_6.jpg" width="120">
 </p>
          
 3. 음성 인식
