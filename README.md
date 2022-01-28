@@ -30,7 +30,7 @@
      - 지도 상단에 위험요소 버튼을 클릭하면 화면 내의 위험요소 정보가 띄워집니다.
      - 길찾기 기능 사용시 경로와 위험요소 위치가 지도에 표시됩니다.
 <p align="center">
- <img src="./img/map2_1.jpg" width="180" height="350">
+ <img src="./img/map2_1.jpg" width="180">
 </p>
 
 2. 길찾기 서비스
