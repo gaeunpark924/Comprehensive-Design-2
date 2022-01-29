@@ -1,7 +1,6 @@
 ## 목차 
 - [프로젝트 설명](#프로젝트-설명) 
 - [설계](#설계)
-- [트러블슈팅](#트러블슈팅)
 - [협업](#협업)
 - [성과](#성과)
 - [시연 영상](#시연-영상)
@@ -81,13 +80,6 @@
 <p align='center'>
 <img src="https://user-images.githubusercontent.com/51811995/151384670-aabc5f23-33b0-4265-9a5e-299888c9fcf0.PNG" width=600>
 </p>
-
-## 트러블슈팅
-- 프로젝트를 진행하며 가장 고민한 2가지 입니다.
-  - [x] [#1 로드뷰의 각도를 조절하기 위한 노력](https://github.com/gaeunpark924/ComprehensiveDesign2/issues/2)
-  > Roadview API에서 로드뷰 방향 정보를 제공하지 않아 로드뷰 방향을 조절할 수 없는 문제가 발생하여 이를 해결하기 위해 노력했습니다.
-  - [ ] #2 음성 인식 기능을 구현하기 위한 고민
-  > Kakao Speech API가 제공하는 기능을 활용해 앱에서 사용할 수 있는 음성 대화를 구현하기 위해 고민했습니다.
     
 ## 협업
 <p align="center">
