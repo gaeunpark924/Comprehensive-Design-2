@@ -1,0 +1,33 @@
+{
+  "name": "grad_proj",
+  "version": "1.0.0",
+  "description": "node.js express와 mysql를 이용해서 게시판 만들기\r <br>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "method-override": "^3.0.0",
+    "mongodb": "^4.1.3",
+    "mongoose": "^6.0.12",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goyuna/hello-world-node-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/goyuna/hello-world-node-/issues"
+  },
+  "homepage": "https://github.com/goyuna/hello-world-node-#readme"
+}

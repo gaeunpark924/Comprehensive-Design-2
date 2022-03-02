@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/nav') %>
+
+    <div class="container mb-3">
+
+      <nav aria-label="breadcrumb"> <!-- bootstrap 컴포넌트 -->
+        <ol class="breadcrumb p-1 pl-2 pr-2">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href="/posts_Seoul">서울</a></li>
+          <li class="breadcrumb-item active" aria-current="page">글 생성</li>
+        </ol>
+      </nav>
+
+      <form action="/posts_Seoul<%= getPostQueryString() %>" method="post">
+
+        <div class="form-group">
+          <label for="title">제목</label>
+          <input type="text" id="title" name="title" value="<%= post.title %>" class="form-control <%= (errors.title)?'is-invalid':'' %>">
+          <% if(errors.title){ %>
+            <span class="invalid-feedback"><%= errors.title.message %></span>
+          <% } %>
+        </div>
+        
+        <div class="form-group">
+          <label for="body">내용</label>
+          <textarea id="body" name="body" rows="5" class="form-control <%= (errors.body)?'is-invalid':'' %>"><%= post.body %></textarea>
+          <% if(errors.body){ %>
+            <span class="invalid-feedback"><%= errors.body.message %></span>
+          <% } %>
+        </div>
+
+        <% if(errors.unhandled){ %>
+          <div class="invalid-feedback d-block">
+            <%= errors.unhandled %>
+          </div>
+        <% } %>
+
+        <div>
+          <a class="btn btn-primary" href="/posts_Seoul<%= getPostQueryString() %>">Back</a>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </div>
+
+      </form>
+    </div>
+  </body>
+</html>

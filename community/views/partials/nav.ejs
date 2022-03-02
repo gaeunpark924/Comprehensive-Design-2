@@ -1,0 +1,31 @@
+<!-- views/partials/nav.ejs -->
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+  <div class="container"> <!--내용 가운데-->
+    <div class="navbar-brand">커뮤니티</div><!--사이트제목-->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"> <!--작은화면에서 메뉴를 숨기고 보여주는 toggle버튼-->
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/posts_Seoul" class="nav-link">서울</a></li>
+        <li class="nav-item"><a href="/posts_Gyeonggi" class="nav-link">경기도</a></li>
+        <li class="nav-item"><a href="/posts_CC" class="nav-link">충청도</a></li>
+        <li class="nav-item"><a href="/posts_GW" class="nav-link">강원도</a></li>
+        <li class="nav-item"><a href="/posts_JL" class="nav-link">전라도</a></li>
+        <li class="nav-item"><a href="/posts_GS" class="nav-link">경상도</a></li>
+        <li class="nav-item"><a href="/posts_JJ" class="nav-link">제주도</a></li>
+      </ul>
+      <ul class="navbar-nav ml-auto"> <!--우측정렬된 메뉴-->
+        <% if(isAuthenticated){ %> 
+          <li class="nav-item"><a href="/users/<%= currentUser.username %>" class="nav-link">내 계정</a></li>
+          <li class="nav-item"><a href="/logout" class="nav-link">로그아웃</a></li>
+        <% } else { %>
+          <li class="nav-item"><a href="/users/new" class="nav-link">회원가입</a></li>
+          <li class="nav-item"><a href="/login" class="nav-link">로그인</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

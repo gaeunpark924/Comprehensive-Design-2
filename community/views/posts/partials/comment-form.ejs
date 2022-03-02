@@ -1,0 +1,27 @@
+<%/* 
+ actionUrl <!--댓글의 수정과 생성에 모두 사용되므로 parameter로 만듦-->
+ comment <!--댓글의 수정의 경우 원 댓글의 정보가 전달-->
+ commentForm 
+ commentError <!--Error가 있는 경우 commentError flash의 정보가 전달-->
+*/%>
+
+<form action="<%= actionUrl %><%= getPostQueryString(true) %>" method="post_Seoul">
+  <fieldset <%= !isAuthenticated?'disabled':'' %>>
+    <div class="row">
+      <div class="col-8"> 
+        <textarea name="text" rows="2" class="form-control <%= (commentError._id == comment._id && commentError.errors.text)?'is-invalid':'' %>"><%= (commentForm._id == comment._id)?commentForm.form.text:comment.text %></textarea>
+      </div>
+      <div class="col-4">
+        <% if(comment._id){ %>
+          <button type="submit" class="btn btn-primary h-100 mr-2 pl-4 pr-4">수정</button>
+          <a href="javascript:void(0)" onclick="$('#comment-<%= comment._id %>').removeClass('comment-edit-enabled')">취소</a>
+        <% } else { %>
+          <button type="submit" class="btn btn-primary h-100 mr-2">댓글 추가</button>
+        <% } %>
+      </div>
+    </div>
+    <% if(commentError._id == comment._id && commentError.errors.text){ %>
+      <span class="invalid-feedback d-block"><%= commentError.errors.text.message %></span>
+    <% } %>
+  </fieldset>
+</form>
