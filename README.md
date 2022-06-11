@@ -56,6 +56,11 @@
 
 ## 프로젝트 설명
 ### Preview
+|<img src="https://user-images.githubusercontent.com/51811995/173180071-8db47337-d8eb-4c1b-b2b8-c2e79e9994d2.gif" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173180049-75aefff1-c82d-4f59-bafe-872ab729c81b.gif" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173181366-08bf9429-90a9-49fd-b982-2003954b268b.gif" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173181420-97f9c9c7-d6c5-4e99-bfec-874ad630e509.gif" width=230>|
+|:---:|:---:|:---:|:---:|
+|지도 화면 내 위험요소|경로 찾기|경로 찾기 결과|위험요소 탐지|
+|<img src="https://user-images.githubusercontent.com/51811995/173181498-71725200-83c6-46c2-9fa0-29c670266e93.gif" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173182360-687b73cd-f09f-4f27-a692-7dd055186c3f.png" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173182019-51e362c1-923b-4036-af0d-0e10a2502d51.jpg" width=230>|<img src="https://user-images.githubusercontent.com/51811995/173181978-c87b3095-68c9-4a70-a9b6-73e72b85bb18.jpg" width=230>|
+|위험요소 정보 추출|커뮤니티|음성 안내|위험요소 등록|
 
 ### 1. 지도 🔍
 - 지도 상단에 위험요소 버튼을 클릭하면 화면 내의 위험요소 위치가 마커로 표시됩니다.
