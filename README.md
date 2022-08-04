@@ -4,11 +4,10 @@
  <img src="https://user-images.githubusercontent.com/51811995/172270591-a6d569f9-ec6c-4d3a-b294-ad94ad63752e.PNG">
 </p>
 
-**🏆 건국대학교 SW경진대회 [장려상](https://drive.google.com/uc?id=1nyhV6eyY6XOo0Oe5MBGB31CmLT02O0b-)**
+**🏆 학교 SW경진대회 장려상**
 
-**👨‍💻 2021 공개SW개발자대회 [결선 진출작](http://bypub.kr/ebook/oss2021-1/index.html#p=56)**
+**👨‍💻 2021 공개SW개발자대회 결선 진출작**
 
-> **Konkuk University  smartICTconvergence**</br>
 > 팀원 : 안예림, 서민영, 박가은, 고유나</br>
 
 ## 목차 
